@@ -50,8 +50,41 @@ public class CurrencyController {
 	String calculateCol(@PathVariable ("amount") float amount, @PathVariable("base")String base
 			, @PathVariable("code")String code) {
 		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
+		
+		processCalculateCol(amount, base, code);
+		
 		return "mainget";
 	}
+	
+	private void processCalculateCol(float amount, String base, String code) {
+		float thebase = repository.findByCode(base).getRate();
+		float theCode= repository.findByCode(code).getRate();
+		
+		float total = thebase/theCode * amount;
+		System.out.println("Total: " + total);
+	}
+	
+	// get rate by base code
+	//get rate by code
+	
+	//calculate the ratio and multiply this by the amount
+	
+	//below are totals, not rates
+	//a = 90  and b = 130
+	// I need to know how much more or less is a compared to b
+	//a/b * amount 
+	
+//	repository.save(new Rate("EUR",0.88857F,new Date()));
+//	repository.save(new Rate("JPY",102.17F,new Date()));
+//	repository.save(new Rate("GBP",0.75705F,new Date()));
+//	repository.save(new Rate("MXN",19.232F,new Date()));
+//	repository.save(new Rate("GBP",0.75705F,new Date()));
+	
+	
+	
+	
+	
+	
 	
 	//@RequestMapping(path="/new",method = {RequestMethod.POST})
 	

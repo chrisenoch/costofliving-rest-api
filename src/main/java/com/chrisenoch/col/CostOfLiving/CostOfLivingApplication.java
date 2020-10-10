@@ -20,11 +20,11 @@ public class CostOfLivingApplication {
 	@Bean
 	public CommandLineRunner data(RateRepository repository) {
 		return (args) -> {
-			repository.save(new Rate("EUR",0.88857F,new Date()));
-			repository.save(new Rate("JPY",102.17F,new Date()));
-			repository.save(new Rate("GBP",0.75705F,new Date()));
-			repository.save(new Rate("MXN",19.232F,new Date()));
-			repository.save(new Rate("GBP",0.75705F,new Date()));
+			repository.save(new Rate("EUR",70F,new Date()));
+			repository.save(new Rate("JPY",140F,new Date()));
+			repository.save(new Rate("GBP",30F,new Date()));
+			repository.save(new Rate("MXN",230F,new Date()));
+			repository.save(new Rate("GBP",80F,new Date()));
 		};
 	}
 
