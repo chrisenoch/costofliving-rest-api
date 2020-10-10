@@ -4,16 +4,16 @@ package com.chrisenoch.col.CostOfLiving.entity;
 import java.util.Date;
 import java.util.List;
 
-public class Rates {
+public class COLIndexes {
 	
-	private List<Rate> rates;
+	private List<COLIndex> rates;
 	private Date date;
 	
 	
-	public List<Rate> getRates() {
+	public List<COLIndex> getRates() {
 		return rates;
 	}
-	public void setRates(List<Rate> rates) {
+	public void setRates(List<COLIndex> rates) {
 		this.rates = rates;
 	}
 	public Date getDate() {
@@ -22,7 +22,7 @@ public class Rates {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public Rates(List<Rate> rates, Date date) {
+	public COLIndexes(List<COLIndex> rates, Date date) {
 		super();
 		this.rates = rates;
 		this.date = date;

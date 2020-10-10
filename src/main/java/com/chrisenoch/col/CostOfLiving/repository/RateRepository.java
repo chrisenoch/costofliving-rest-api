@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.chrisenoch.col.CostOfLiving.entity.Rate;
+import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 
-public interface RateRepository  extends JpaRepository<Rate,String>{
-		List<Rate> findByDate(Date date);
-		Rate findByCode(String code);
-		Rate findByDateAndCode(Date date,String code);
+public interface RateRepository  extends JpaRepository<COLIndex,String>{
+		List<COLIndex> findByDate(Date date);
+		COLIndex findByCode(String code);
+		COLIndex findByDateAndCode(Date date,String code);
 }

@@ -1,6 +1,5 @@
 package com.chrisenoch.col.CostOfLiving.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -11,24 +10,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.chrisenoch.col.CostOfLiving.entity.Rate;
+import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 
 @Controller
 @RequestMapping("/costofliving")
-public class CurrencyController {
+public class COLController {
 	
 	@Autowired
 	RateRepository repository;
 	
 	@GetMapping
-	String showRates() {
+	String showCOlIndexes() {
 		//To do
 		//print rates
 		System.out.println("get endpoint");
-		List<Rate> rates = repository.findAll();
-		System.out.println("Printing rates" + rates);
-		rates.forEach(System.out::println);
+		List<COLIndex> colIndexes = repository.findAll();
+		System.out.println("Printing rates" + colIndexes);
+		colIndexes.forEach(System.out::println);
 		
 		return "mainget";
 		
@@ -38,7 +37,7 @@ public class CurrencyController {
 	String ratesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) {
 		//To do
 		//print rates
-		List<Rate> rates = repository.findByDate(date);
+		List<COLIndex> rates = repository.findByDate(date);
 		System.out.println("Printing rates by date" + rates);
 		rates.forEach(System.out::println);
 		System.out.println("Date received: " + date);
@@ -62,6 +61,8 @@ public class CurrencyController {
 		
 		float total = thebase/theCode * amount;
 		System.out.println("Total: " + total);
+		
+		//return new CurrencyExchange
 	}
 	
 	// get rate by base code

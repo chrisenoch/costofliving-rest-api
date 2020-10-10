@@ -1,7 +1,7 @@
 package com.chrisenoch.col.CostOfLiving.entity;
 
 
-public class CurrencyConverter {
+public class COLConverter {
 	private String base;
 	private String code;
 	private float amount;
@@ -30,7 +30,7 @@ public class CurrencyConverter {
 	public void setTotal(float total) {
 		this.total = total;
 	}
-	public CurrencyConverter(String base, String code, float amount, float total) {
+	public COLConverter(String base, String code, float amount, float total) {
 		super();
 		this.base = base;
 		this.code = code;

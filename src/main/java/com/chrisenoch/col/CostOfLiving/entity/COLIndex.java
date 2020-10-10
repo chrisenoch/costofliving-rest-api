@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Rate {
+public class COLIndex {
 	
 	@Id
 	private String code;
@@ -45,14 +45,14 @@ public class Rate {
 		this.date = date;
 	}
 
-	public Rate(String code, float rate, Date date) {
+	public COLIndex(String code, float rate, Date date) {
 		super();
 		this.code = code;
 		this.rate = rate;
 		this.date = date;
 	}
 	
-	public Rate() {
+	public COLIndex() {
 	}
 
 	@Override
