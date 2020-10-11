@@ -20,12 +20,12 @@ public class CostOfLivingApplication {
 	@Bean
 	public CommandLineRunner data(RateRepository repository) {
 		return (args) -> {
-			repository.save(new COLIndex("Tokyo","Japan", 70F,new Date()));
-			repository.save(new COLIndex("London","England", 140F,new Date()));
-			repository.save(new COLIndex("Shanghai", "China",30F,new Date()));
-			repository.save(new COLIndex("Madrid", "Spain",230F,new Date()));
-			repository.save(new COLIndex("Berlin","Germany", 170F,new Date()));
-			repository.save(new COLIndex("Bristol","England", 110F,new Date()));
+			repository.save(new COLIndex("TOKYO","JAPAN", 70F,new Date()));
+			repository.save(new COLIndex("LONDON","ENGLAND", 140F,new Date()));
+			repository.save(new COLIndex("SHANGHAI", "CHINA",30F,new Date()));
+			repository.save(new COLIndex("MADRID", "SPAIN",230F,new Date()));
+			repository.save(new COLIndex("BERLIN","GERMANY", 170F,new Date()));
+			repository.save(new COLIndex("BRISTOL","ENGLAND", 110F,new Date()));
 		};
 	}
 

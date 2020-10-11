@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.chrisenoch.col.CostOfLiving.entity.COLResults;
+import com.chrisenoch.col.CostOfLiving.annotation.ToUpper;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
+import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 
 @Service
@@ -23,7 +24,7 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public COLIndex findByCity(String city) {
+	public COLIndex findByCity( String city) {
 		return repository.findByCity(city);
 	}
 	
@@ -34,12 +35,12 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLIndex> findColIndexesByCountry(String country){
+	public List<COLIndex> findColIndexesByCountry( String country){
 		return repository.findByCountry(country);
 	}
 	
 	@Override
-	public COLResults calculateEquivalentSalary(float amount, String city1, String city2) { //Improve code. See currency eg and null. Need to test for null.
+	public COLResults calculateEquivalentSalary(float amount,  String city1,  String city2) { //Improve code. See currency eg and null. Need to test for null.
 		float theBase = repository.findByCity(city1).getRate();
 		float theCode= repository.findByCity(city2).getRate();
 		
@@ -50,11 +51,12 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex,  String country) { //Improve code. See currency eg and null. Need to test for null.
+	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex,   String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country);
 		//colIndex.getRate();
 		//List<COLResults> results = COLIndexes.stream().mapToDouble(r->r.getRate()).
-		List<COLResults> results = COLIndexes.stream().map(r -> new COLResults(colIndex.getCity(), r.getCity(), amount, colIndex.getRate()/r.getRate() * amount )
+		List<COLResults> results = COLIndexes.stream().map(r -> new COLResults(colIndex.getCity()
+				, r.getCity(), amount, colIndex.getRate()/r.getRate() * amount )
 				).collect(Collectors.toList());
 						
 		return results;
