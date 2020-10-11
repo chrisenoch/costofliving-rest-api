@@ -25,6 +25,7 @@ public class CostOfLivingApplication {
 			repository.save(new COLIndex("Shanghai", "China",30F,new Date()));
 			repository.save(new COLIndex("Madrid", "Spain",230F,new Date()));
 			repository.save(new COLIndex("Berlin","Germany", 170F,new Date()));
+			repository.save(new COLIndex("Bristol","England", 110F,new Date()));
 		};
 	}
 

@@ -9,5 +9,6 @@ import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 
 public interface RateRepository  extends JpaRepository<COLIndex,String>{
 		List<COLIndex> findByDate(Date date);
-		COLIndex findByCountry(String code);
+		COLIndex findByCity(String city);
+		List<COLIndex> findByCountry(String country);
 }

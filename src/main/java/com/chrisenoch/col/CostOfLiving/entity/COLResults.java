@@ -2,21 +2,21 @@ package com.chrisenoch.col.CostOfLiving.entity;
 
 
 public class COLResults {
-	private String base;
-	private String code;
+	private String city1;
+	private String city2;
 	private float amount;
 	private float total;
-	public String getBase() {
-		return base;
+	public String getCity1() {
+		return city1;
 	}
-	public void setBase(String base) {
-		this.base = base;
+	public void setCity1(String city1) {
+		this.city1 = city1;
 	}
-	public String getCode() {
-		return code;
+	public String getCity2() {
+		return city2;
 	}
-	public void setCode(String code) {
-		this.code = code;
+	public void setCity2(String city2) {
+		this.city2 = city2;
 	}
 	public float getAmount() {
 		return amount;
@@ -30,10 +30,10 @@ public class COLResults {
 	public void setTotal(float total) {
 		this.total = total;
 	}
-	public COLResults(String base, String code, float amount, float total) {
+	public COLResults(String city1, String city2, float amount, float total) {
 		super();
-		this.base = base;
-		this.code = code;
+		this.city1 = city1;
+		this.city2 = city2;
 		this.amount = amount;
 		this.total = total;
 	}

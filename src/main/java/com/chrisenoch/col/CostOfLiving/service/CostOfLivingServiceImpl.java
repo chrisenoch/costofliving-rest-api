@@ -28,14 +28,19 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public COLResults calculateEquivalentSalary(float amount, String base, String code) { //Improve code. See currency eg and null. Need to test for null.
-		float theBase = repository.findByCountry(base).getRate();
-		float theCode= repository.findByCountry(code).getRate();
+	public List<COLIndex> findColIndexesByCountry(String country){
+		return repository.findByCountry(country);
+	}
+	
+	@Override
+	public COLResults calculateEquivalentSalary(float amount, String city1, String city2) { //Improve code. See currency eg and null. Need to test for null.
+		float theBase = repository.findByCity(city1).getRate();
+		float theCode= repository.findByCity(city2).getRate();
 		
 		float total = theBase/theCode * amount;
 		System.out.println("Total: " + total);
 		
-		return new COLResults(base, code, amount, total);
+		return new COLResults(city1, city2, amount, total);
 	}
 		
 	
