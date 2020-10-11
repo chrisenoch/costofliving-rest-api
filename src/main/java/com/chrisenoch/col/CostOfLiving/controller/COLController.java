@@ -68,7 +68,8 @@ public class COLController {
 	
 	
 	@GetMapping("/{amount}/{base}/to/{code}")
-	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount, @PathVariable("base")String base
+	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
+			, @PathVariable("base")String base
 			, @PathVariable("code")String code) {
 		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
 
