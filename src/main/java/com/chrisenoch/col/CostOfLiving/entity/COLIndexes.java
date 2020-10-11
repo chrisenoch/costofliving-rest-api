@@ -23,7 +23,6 @@ public class COLIndexes {
 		this.date = date;
 	}
 	public COLIndexes(List<COLIndex> rates, Date date) {
-		super();
 		this.rates = rates;
 		this.date = date;
 	}		

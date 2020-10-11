@@ -1,43 +1,55 @@
 package com.chrisenoch.col.CostOfLiving.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
-import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
+import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
+import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 
 @Controller
 @RequestMapping("/costofliving")
 public class COLController {
 	
 	@Autowired
-	RateRepository repository;
+	CostOfLivingService costOfLivingService;
 	
 	@GetMapping
+	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
+	}
+	
+	/*
+	 * @GetMapping
 	String showCOlIndexes() {
 		//To do
 		//print rates
 		System.out.println("get endpoint");
-		List<COLIndex> colIndexes = repository.findAll();
+		List<COLIndex> colIndexes = costOfLivingService.findColIndexes();
 		System.out.println("Printing rates" + colIndexes);
 		colIndexes.forEach(System.out::println);
 		
 		return "mainget";
 		
 	}
+	 */
 	
 	@GetMapping("/{date}")
 	String ratesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) {
 		//To do
 		//print rates
-		List<COLIndex> rates = repository.findByDate(date);
+		List<COLIndex> rates = costOfLivingService.findColIndexes(date);
 		System.out.println("Printing rates by date" + rates);
 		rates.forEach(System.out::println);
 		System.out.println("Date received: " + date);
@@ -50,20 +62,11 @@ public class COLController {
 			, @PathVariable("code")String code) {
 		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
 		
-		processCalculateCol(amount, base, code);
+		costOfLivingService.calculateEquivalentSalary(amount, base, code);
 		
 		return "mainget";
 	}
-	
-	private void processCalculateCol(float amount, String base, String code) {
-		float thebase = repository.findByCode(base).getRate();
-		float theCode= repository.findByCode(code).getRate();
-		
-		float total = thebase/theCode * amount;
-		System.out.println("Total: " + total);
-		
-		//return new CurrencyExchange
-	}
+
 	
 	// get rate by base code
 	//get rate by code
