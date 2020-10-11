@@ -46,6 +46,12 @@ public class COLController {
 	 */
 	
 	@GetMapping("/{date}")
+	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
+	}
+	
+	/*
+	 * @GetMapping("/{date}")
 	String ratesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) {
 		//To do
 		//print rates
@@ -56,6 +62,8 @@ public class COLController {
 		System.out.println("Gogggoo");
 		return "mainget";
 	}
+	 */
+	
 	
 	@GetMapping("/{amount}/{base}/to/{code}")
 	String calculateCol(@PathVariable ("amount") float amount, @PathVariable("base")String base

@@ -14,19 +14,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class COLIndex {
 	
 	@Id
-	private String code;
+	private String city;
+	private String country;
 	private float rate;
 	
-	//@JsonIgnore //Improve code
+	@JsonIgnore 
 	@Temporal(TemporalType.DATE)
 	Date date;
 
-	public String getCode() {
-		return code;
+	public String getCity() {
+		return city;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public float getRate() {
@@ -45,9 +46,17 @@ public class COLIndex {
 		this.date = date;
 	}
 
-	public COLIndex(String code, float rate, Date date) {
-		super();
-		this.code = code;
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public COLIndex(String city, String country, float rate, Date date) {
+		this.city = city;
+		this.country = country;
 		this.rate = rate;
 		this.date = date;
 	}
@@ -55,10 +64,7 @@ public class COLIndex {
 	public COLIndex() {
 	}
 
-	@Override
-	public String toString() {
-		return "Rate [code=" + code + ", rate=" + rate + ", date=" + date + "]";
-	}
+	
 	
 	
 }

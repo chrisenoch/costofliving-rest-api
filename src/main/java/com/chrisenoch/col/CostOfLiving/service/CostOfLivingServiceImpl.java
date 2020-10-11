@@ -23,13 +23,14 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	
 	@Override
 	public List<COLIndex> findColIndexes(Date theDate){
+		System.out.println("Inside find by date");
 		return repository.findByDate(theDate);
 	}
 	
 	@Override
 	public COLResults calculateEquivalentSalary(float amount, String base, String code) { //Improve code. See currency eg and null. Need to test for null.
-		float theBase = repository.findByCode(base).getRate();
-		float theCode= repository.findByCode(code).getRate();
+		float theBase = repository.findByCountry(base).getRate();
+		float theCode= repository.findByCountry(code).getRate();
 		
 		float total = theBase/theCode * amount;
 		System.out.println("Total: " + total);
