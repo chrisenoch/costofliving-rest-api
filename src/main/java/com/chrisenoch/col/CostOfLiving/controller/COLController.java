@@ -1,6 +1,7 @@
 package com.chrisenoch.col.CostOfLiving.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
@@ -67,13 +69,26 @@ public class COLController {
 	 */
 	
 	
-	@GetMapping("/{amount}/{base}/to/{code}")
+	@GetMapping(value = "/{amount}/{base}/to/{code}")
 	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
 			, @PathVariable("code")String code) {
 		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
 
 		return new ResponseEntity<COLResults>(costOfLivingService.calculateEquivalentSalary(amount, base, code), HttpStatus.OK);
+
+	}
+	
+	
+	@GetMapping(value= "/{amount}/{base}/to/{country}", params = "country")
+	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
+			, @PathVariable("base")String base
+			, @PathVariable("country")String country) {
+
+		//create instance of COLIndex from city value
+		COLIndex colIndex = costOfLivingService.findByCity(base);
+		
+		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
 
 	}
 	

@@ -23,6 +23,11 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
+	public COLIndex findByCity(String city) {
+		return repository.findByCity(city);
+	}
+	
+	@Override
 	public List<COLIndex> findColIndexes(Date theDate){
 		System.out.println("Inside find by date");
 		return repository.findByDate(theDate);
@@ -55,7 +60,7 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 		return results;
 	}
 		
-
+ 
 	
 	/*
 	 * 		//Find by country - List
