@@ -17,8 +17,8 @@ import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 
-@Controller
-@RequestMapping("/costofliving")
+//@Controller
+//@RequestMapping("/costofliving")
 public class COLController {
 	
 	@Autowired
@@ -68,7 +68,7 @@ public class COLController {
 		
 		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
 
-	}
+	} 
 	
 	
 	/*

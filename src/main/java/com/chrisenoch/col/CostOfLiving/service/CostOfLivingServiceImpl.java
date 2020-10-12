@@ -13,7 +13,7 @@ import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 
 @Service
-public class CostOfLivingServiceImplService implements CostOfLivingService{
+public class CostOfLivingServiceImpl implements CostOfLivingService{
 	
 	@Autowired
 	RateRepository repository;

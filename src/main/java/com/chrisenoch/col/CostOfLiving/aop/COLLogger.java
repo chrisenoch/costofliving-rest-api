@@ -20,7 +20,7 @@ public class COLLogger {
 
 	//@Pointcut("execution(* com.apress.messaging.service.*Service.*(..,@com.apress.messaging.annotation.ToUpper (*),..))")
 
-	@Pointcut("execution(* com.chrisenoch.col.CostOfLiving.service.*Service.*(..,@com.chrisenoch.col.CostOfLiving.annotation.ToUpper (*),..))")
+	@Pointcut("execution(* com.chrisenoch.col.CostOfLiving.service.*Service*.*(..,@com.chrisenoch.col.CostOfLiving.annotation.ToUpper (*),..))")
     public void methodPointcut() {} //Learn code: pointcut expression with custom annotation. Think it means 0 or more args followed by @toUpper arg followed by zero or more args.
 	
 	@Around("methodPointcut()")
