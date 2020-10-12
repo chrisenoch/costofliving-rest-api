@@ -25,6 +25,12 @@ public class COLIndexes {
 	public COLIndexes(List<COLIndex> rates, Date date) {
 		this.rates = rates;
 		this.date = date;
-	}		
+	}
+	@Override
+	public String toString() {
+		return "COLIndexes [rates=" + rates + ", date=" + date + "]";
+	}	
+	
+	
 
 }

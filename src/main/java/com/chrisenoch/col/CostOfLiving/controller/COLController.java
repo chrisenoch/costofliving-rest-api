@@ -32,6 +32,9 @@ public class COLController {
 	//Not working
 	@GetMapping("/country/{country}")
 	public ResponseEntity<COLIndexes> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
+		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		test.forEach(System.out::println);
+		
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexesByCountry(country), new Date()),HttpStatus.OK);
 	}
 	
@@ -59,7 +62,9 @@ public class COLController {
 			, @PathVariable("country")String country) {
 
 		//create instance of COLIndex from city value
+		base = base.toUpperCase();
 		COLIndex colIndex = costOfLivingService.findByCity(base);
+		System.out.println("colIndex value " + colIndex);
 		
 		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
 

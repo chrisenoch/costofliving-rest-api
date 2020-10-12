@@ -13,7 +13,7 @@ import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 
 @Service
-public class CostOfLivingServiceImpl implements CostOfLivingService{
+public class CostOfLivingServiceImplService implements CostOfLivingService{
 	
 	@Autowired
 	RateRepository repository;
@@ -35,12 +35,13 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLIndex> findColIndexesByCountry( String country){
+	public List<COLIndex> findColIndexesByCountry(@ToUpper String country){
+		System.out.println("Inside findColIndexesByCountry " + country);
 		return repository.findByCountry(country);
 	}
 	
 	@Override
-	public COLResults calculateEquivalentSalary(float amount,  String city1,  String city2) { //Improve code. See currency eg and null. Need to test for null.
+	public COLResults calculateEquivalentSalary(float amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
 		float theBase = repository.findByCity(city1).getRate();
 		float theCode= repository.findByCity(city2).getRate();
 		
@@ -51,14 +52,27 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex,   String country) { //Improve code. See currency eg and null. Need to test for null.
+	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country);
-		//colIndex.getRate();
+		System.out.println("Inside find by country " + country + " " + amount + " " + colIndex.getCity());
+		COLIndexes.forEach(System.out::println);
 		//List<COLResults> results = COLIndexes.stream().mapToDouble(r->r.getRate()).
-		List<COLResults> results = COLIndexes.stream().map(r -> new COLResults(colIndex.getCity()
-				, r.getCity(), amount, colIndex.getRate()/r.getRate() * amount )
+		List<COLResults> results = COLIndexes.stream().map(
+				r -> {
+					System.out.println("colIndex.getCity() " + colIndex.getCity() + " " 
+							+ "r.getCity() " +  r.getCity()
+							+ "colIndex.getRate() " + colIndex.getRate()
+							+ "r.getRate() " + r.getRate()
+							
+							);
+					return new COLResults(colIndex.getCity()
+				, r.getCity(), amount, colIndex.getRate()/r.getRate() * amount );
+				
+				}
+				
 				).collect(Collectors.toList());
 						
+		results.forEach(System.out::println);
 		return results;
 	}
 		

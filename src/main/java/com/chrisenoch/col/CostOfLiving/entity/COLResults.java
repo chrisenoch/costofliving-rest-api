@@ -37,5 +37,11 @@ public class COLResults {
 		this.amount = amount;
 		this.total = total;
 	}
+	@Override
+	public String toString() {
+		return "COLResults [city1=" + city1 + ", city2=" + city2 + ", amount=" + amount + ", total=" + total + "]";
+	}
+	
+	
 
 }

@@ -64,6 +64,11 @@ public class COLIndex {
 	public COLIndex() {
 	}
 
+	@Override
+	public String toString() {
+		return "COLIndex [city=" + city + ", country=" + country + ", rate=" + rate + ", date=" + date + "]";
+	}
+
 	
 	
 	
