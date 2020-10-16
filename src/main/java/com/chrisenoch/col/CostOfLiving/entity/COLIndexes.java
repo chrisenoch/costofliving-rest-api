@@ -4,6 +4,9 @@ package com.chrisenoch.col.CostOfLiving.entity;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
+
 public class COLIndexes {
 	
 	private List<COLIndex> rates;
@@ -30,7 +33,6 @@ public class COLIndexes {
 	public String toString() {
 		return "COLIndexes [rates=" + rates + ", date=" + date + "]";
 	}	
-	
-	
+
 
 }

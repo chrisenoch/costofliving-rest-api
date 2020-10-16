@@ -1,50 +1,83 @@
 package com.chrisenoch.col.CostOfLiving.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 
-@Controller
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+@RestController
 @RequestMapping("/costofliving")
-public class COLController {
+public class COLController extends RepresentationModel<COLController> {
+	
+	
 	
 	@Autowired
 	CostOfLivingService costOfLivingService;
 	
+	@GetMapping("/gethateoas")
+	public EntityModel<COLIndex>getHateoas() throws Exception{
+		COLIndex rate = new COLIndex("Birmingmam", "England", 1456F, new Date());
+		EntityModel<COLIndex> model = EntityModel.of(rate);
+		model.add(Link.of("http://localhost:8080/costofliving/123"));
+		//rate.add(Link.of("http://localhost:8080/costofliving/123"));
+		
+		return model;
+	}
+	
 	@GetMapping
 	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
+		//CollectionModel<Person> model = CollectionModel.of(people);
+		
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
 	}
 	
-	//Not working
 	@GetMapping("/country/{country}")
-	public ResponseEntity<COLIndexes> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
+	public ResponseEntity<CollectionModel<COLIndex>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
 		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		CollectionModel<COLIndex> model = CollectionModel.of(test);
 		test.forEach(System.out::println);
 		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexesByCountry(country), new Date()),HttpStatus.OK);
+		model.add(linkTo(methodOn(COLController.class).getIndexesByCountry(country)).withSelfRel());
+		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
+		
+		
+		//getIndexesByCountry
+		
+		//COLIndexes newC = new COLIndexes(test, new Date());
+		//RepresentationModel<?> model2 = CollectionModel.of(newC);
+		
+		//greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
+		
+		return new ResponseEntity<CollectionModel<COLIndex>>(model, HttpStatus.OK);
+		//return new ResponseEntity<CollectionModel<COLIndex>>(model, HttpStatus.OK);
+		//return new ResponseEntity<COLIndexes>(new COLIndexes(test, new Date()),HttpStatus.OK);
 	}
 	
-	//Appears to work
 	@GetMapping("/{date}")
 	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
 	}
 	
-	//Does not work
 	@GetMapping("/{amount}/{base}/to/{code}")
 	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
@@ -55,7 +88,6 @@ public class COLController {
 
 	}
 	
-	//Does not work
 	@GetMapping("/{amount}/{base}/tocountry/{country}")
 	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
@@ -69,6 +101,8 @@ public class COLController {
 		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
 
 	}
+	
+	Link link = linkTo(COLController.class).withRel("people");
 	
 	
 	/*
@@ -103,11 +137,9 @@ public class COLController {
 //	repository.save(new Rate("GBP",0.75705F,new Date()));
 	
 	
+
 	
-	
-	
-	
-	
+
 	//@RequestMapping(path="/new",method = {RequestMethod.POST})
 	
 
