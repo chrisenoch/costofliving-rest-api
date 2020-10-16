@@ -1,9 +1,13 @@
 package com.chrisenoch.col.CostOfLiving.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,17 +23,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
+import com.chrisenoch.col.CostOfLiving.entity.COLIndexModel;
+import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssembler;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
 @RestController
 @RequestMapping("/costofliving")
 public class COLController extends RepresentationModel<COLController> {
-	
-	
+
 	
 	@Autowired
 	CostOfLivingService costOfLivingService;
@@ -53,24 +56,48 @@ public class COLController extends RepresentationModel<COLController> {
 	
 	@GetMapping("/country/{country}")
 	public ResponseEntity<CollectionModel<COLIndex>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
-		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
-		CollectionModel<COLIndex> model = CollectionModel.of(test);
-		test.forEach(System.out::println);
+		//Need to change this so returns a COLIndexes object
 		
+		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		
+		Collection<List<COLIndex>> colIndexCollection = Collections.singleton(test);
+		CollectionModel<COLIndex> model = CollectionModel.of(test);	
 		model.add(linkTo(methodOn(COLController.class).getIndexesByCountry(country)).withSelfRel());
 		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
-		
-		
-		//getIndexesByCountry
-		
-		//COLIndexes newC = new COLIndexes(test, new Date());
-		//RepresentationModel<?> model2 = CollectionModel.of(newC);
-		
-		//greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
-		
+			
 		return new ResponseEntity<CollectionModel<COLIndex>>(model, HttpStatus.OK);
-		//return new ResponseEntity<CollectionModel<COLIndex>>(model, HttpStatus.OK);
-		//return new ResponseEntity<COLIndexes>(new COLIndexes(test, new Date()),HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/countryx/{country}")
+	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry2(@PathVariable("country") String country) throws Exception{
+		//Need to change this so returns a COLIndexes object
+		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
+		
+		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		test.forEach(System.out::println);
+		List<COLIndexModel> test4= test.stream().map(c-> colIndexModelAssembler
+				.toModel(c)).collect(Collectors.toList());
+				
+		
+		//List<COLIndex> test4 = test.stream().map(c-> colIndexModelAssembler
+				//.toModel(c)).map(c-> c.add("Http://localhost.com")).collect(Collectors.toList()));
+		
+		
+		//CollectionModel<COLIndexModel> test3 = new COLIndexModelAssembler().toCollectionModel(test4);
+		
+		//Collection<List<COLIndex>> colIndexCollection = Collections.singleton(test);
+		
+		//COLIndexModelAssembler assembler = new COLIndexModelAssembler();
+	
+		//CollectionModel<COLIndexModel> model = assembler.toCollectionModel(test);
+		
+		//CollectionModel<COLIndex> model = CollectionModel.of(test);	
+		test4.add(linkTo(methodOn(COLController.class).getIndexesByCountry2(country)).withSelfRel());
+		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
+			
+		return new ResponseEntity<CollectionModel<COLIndexModel>>(test3, HttpStatus.OK);
+
 	}
 	
 	@GetMapping("/{date}")
