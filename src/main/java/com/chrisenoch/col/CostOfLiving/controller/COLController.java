@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexModel;
@@ -54,30 +55,94 @@ public class COLController extends RepresentationModel<COLController> {
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
 	}
 	
+	@GetMapping("/colindexes/{city}")
+	  COLIndex one(@PathVariable String city) {
+
+	    return costOfLivingService.findByCity(city);
+	  }
+	
+	@GetMapping("/countrygoodluck")
+	public CollectionModel<EntityModel<COLIndex>> getIndexesHATEOAS(){
+		try {
+			List<EntityModel<COLIndex>> luckytest= costOfLivingService.findColIndexes()
+					.stream().map(COLIndex-> EntityModel.of(COLIndex,
+							
+							linkTo(methodOn(COLController.class).one(COLIndex.getCity())).withSelfRel()
+					          ,linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes")
+					          ))
+				      .collect(Collectors.toList());
+							 
+			return CollectionModel.of(luckytest, linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));
+		} catch (Exception exc) {
+			System.out.println("Exception: " + exc);
+			return null;
+		} 
+		
+		
+	}		
+	
+	
+	
 	@GetMapping("/country/{country}")
-	public ResponseEntity<CollectionModel<COLIndex>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
+	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
 		//Need to change this so returns a COLIndexes object
 		
-		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
+
+		//List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		//CollectionModel<COLIndexModel> test123 =   colIndexModelAssembler.toCollectionModel(test);
 		
-		Collection<List<COLIndex>> colIndexCollection = Collections.singleton(test);
-		CollectionModel<COLIndex> model = CollectionModel.of(test);	
-		model.add(linkTo(methodOn(COLController.class).getIndexesByCountry(country)).withSelfRel());
+//		Collection<List<COLIndex>> colIndexCollection = Collections.singleton(test);
+//		CollectionModel<COLIndex> model = CollectionModel.of(test);	
+		//test123.add(Link.of("http://localhost:8080/costofliving/123"));
+//		System.out.println("List of model");
+		//test123.forEach(System.out::println);
 		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
-			
-		return new ResponseEntity<CollectionModel<COLIndex>>(model, HttpStatus.OK);
+		CollectionModel<COLIndexModel> test456 = colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country));
+		System.out.println("Print list below");
+		test456.forEach(System.out::println);
+		
+		return ResponseEntity.ok(colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country)));
+		//return new ResponseEntity<CollectionModel<COLIndexModel>>(test123, HttpStatus.OK);
 
 	}
 	
-	@GetMapping("/countryx/{country}")
-	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry2(@PathVariable("country") String country) throws Exception{
-		//Need to change this so returns a COLIndexes object
-		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
-		
-		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
-		test.forEach(System.out::println);
-		List<COLIndexModel> test4= test.stream().map(c-> colIndexModelAssembler
-				.toModel(c)).collect(Collectors.toList());
+//	@GetMapping("/countrya/{country}")
+//	public ResponseEntity<CollectionModel<COLIndex>> getIndexesByCountry2(@PathVariable("country") String country) throws Exception{
+//		//Need to change this so returns a COLIndexes object
+//		
+//		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+//		
+//		//Need to transform every COLIndex to a COLIndexModel and then make a list out of it.
+//		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
+//		
+//		//List<COLIndexModel> nexttry = test.stream().map(c-> colIndexModelAssembler.toModel(c))
+//				//.collect(Collectors.toList());
+//				
+//		//Iterable<? extends COLIndex> nexttry2 = 
+//		//CollectionModel<COLIndexModel> nextry3 = colIndexModelAssembler.toCollectionModel(nexttry);
+//		
+//
+//		Collection<List<COLIndex>> colIndexCollection = Collections.singleton(test);
+//		CollectionModel<COLIndex> model = CollectionModel.of(test);	
+//		//model.add(linkTo(methodOn(COLController.class).getIndexesByCountry2(country)).withSelfRel());
+//		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
+//			
+//		
+//		
+//		//return new ResponseEntity<CollectionModel<COLIndex>>(model, HttpStatus.OK);
+//
+//	}
+	
+//	@GetMapping("/countryb/{country}")
+//	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry3(@PathVariable("country") String country) throws Exception{
+//		//Need to change this so returns a COLIndexes object
+//		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
+//		
+//		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+//		test.forEach(System.out::println);
+//		List<COLIndexModel> test4= test.stream().map(c-> colIndexModelAssembler
+//				.toModel(c)).collect(Collectors.toList());
 				
 		
 		//List<COLIndex> test4 = test.stream().map(c-> colIndexModelAssembler
@@ -93,12 +158,12 @@ public class COLController extends RepresentationModel<COLController> {
 		//CollectionModel<COLIndexModel> model = assembler.toCollectionModel(test);
 		
 		//CollectionModel<COLIndex> model = CollectionModel.of(test);	
-		test4.add(linkTo(methodOn(COLController.class).getIndexesByCountry2(country)).withSelfRel());
+		//test4.add(linkTo(methodOn(COLController.class).getIndexesByCountry2(country)).withSelfRel());
 		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
 			
-		return new ResponseEntity<CollectionModel<COLIndexModel>>(test3, HttpStatus.OK);
+		//return new ResponseEntity<CollectionModel<COLIndexModel>>(test3, HttpStatus.OK);
 
-	}
+	//}
 	
 	@GetMapping("/{date}")
 	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{

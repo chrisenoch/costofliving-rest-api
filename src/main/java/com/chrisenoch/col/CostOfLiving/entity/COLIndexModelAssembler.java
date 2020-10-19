@@ -8,7 +8,7 @@ public class COLIndexModelAssembler extends RepresentationModelAssemblerSupport<
 
 	public COLIndexModelAssembler() {
 	    super(COLController.class, COLIndexModel.class);
-	  }
+	  } 
 
 	  @Override
 	  public COLIndexModel toModel(COLIndex colIndex) {
@@ -17,4 +17,8 @@ public class COLIndexModelAssembler extends RepresentationModelAssemblerSupport<
 	    // … do further mapping
 	    return resource;
 	  }
+	  
+
+	  
+	  
 	}
