@@ -56,14 +56,17 @@ public class COLController extends RepresentationModel<COLController> {
 	}
 	
 	@GetMapping("/colindexes/{city}")
-	  COLIndex one(@PathVariable String city) {
+	  EntityModel<COLIndex> one(@PathVariable String city) {
 
-	    return costOfLivingService.findByCity(city);
+	   COLIndex colIndex =  costOfLivingService.findByCity(city);
+	   
+	   return EntityModel.of(colIndex
+			   ,  linkTo(methodOn(COLController.class).one(city)).withSelfRel(),
+			      linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));		   
 	  }
 	
 	@GetMapping("/countrygoodluck")
 	public CollectionModel<EntityModel<COLIndex>> getIndexesHATEOAS(){
-		try {
 			List<EntityModel<COLIndex>> luckytest= costOfLivingService.findColIndexes()
 					.stream().map(COLIndex-> EntityModel.of(COLIndex,
 							
@@ -73,15 +76,7 @@ public class COLController extends RepresentationModel<COLController> {
 				      .collect(Collectors.toList());
 							 
 			return CollectionModel.of(luckytest, linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));
-		} catch (Exception exc) {
-			System.out.println("Exception: " + exc);
-			return null;
-		} 
-		
-		
-	}		
-	
-	
+		} 	
 	
 	@GetMapping("/country/{country}")
 	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
