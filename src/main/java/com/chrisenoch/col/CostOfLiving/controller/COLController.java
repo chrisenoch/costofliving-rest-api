@@ -3,8 +3,6 @@ package com.chrisenoch.col.CostOfLiving.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,11 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexModel;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssembler;
+import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssemblerNew;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
@@ -34,9 +32,17 @@ import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 @RequestMapping("/costofliving")
 public class COLController extends RepresentationModel<COLController> {
 
+
+	CostOfLivingService costOfLivingService;
+	COLIndexModelAssemblerNew assembler;
 	
 	@Autowired
-	CostOfLivingService costOfLivingService;
+	public COLController(CostOfLivingService costOfLivingService, COLIndexModelAssemblerNew assembler) {
+		this.costOfLivingService = costOfLivingService;
+		this.assembler = assembler;
+	}
+
+	
 	
 	@GetMapping("/gethateoas")
 	public EntityModel<COLIndex>getHateoas() throws Exception{
@@ -47,7 +53,7 @@ public class COLController extends RepresentationModel<COLController> {
 		
 		return model;
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
 		//CollectionModel<Person> model = CollectionModel.of(people);
@@ -56,7 +62,7 @@ public class COLController extends RepresentationModel<COLController> {
 	}
 	
 	@GetMapping("/colindexes/{city}")
-	  EntityModel<COLIndex> one(@PathVariable String city) {
+	  public EntityModel<COLIndex> one(@PathVariable String city) {
 
 	   COLIndex colIndex =  costOfLivingService.findByCity(city);
 	   
@@ -64,6 +70,27 @@ public class COLController extends RepresentationModel<COLController> {
 			   ,  linkTo(methodOn(COLController.class).one(city)).withSelfRel(),
 			      linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));		   
 	  }
+	
+	@GetMapping("/colindexesassembler/{city}")
+	  public EntityModel<COLIndex> two(@PathVariable String city) {
+
+	   COLIndex colIndex =  costOfLivingService.findByCity(city);
+	   
+	   return assembler.toModel(colIndex);	   
+	  }
+	
+	@GetMapping("/countrygoodluckassembler")
+	  public CollectionModel<EntityModel<COLIndex>> getIndexesHATEOASAssembler() {
+
+	   List<EntityModel<COLIndex>> colIndexes =  costOfLivingService.findColIndexes()
+			   .stream().map(assembler::toModel).collect(Collectors.toList());
+	   
+	   return CollectionModel.of(colIndexes, 
+			   linkTo(methodOn(COLController.class).getIndexesHATEOASAssembler()).withSelfRel());
+			   	   
+	  }
+	
+	
 	
 	@GetMapping("/countrygoodluck")
 	public CollectionModel<EntityModel<COLIndex>> getIndexesHATEOAS(){
