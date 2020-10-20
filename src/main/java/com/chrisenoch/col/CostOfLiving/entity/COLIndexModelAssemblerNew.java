@@ -16,7 +16,7 @@ public class COLIndexModelAssemblerNew implements RepresentationModelAssembler<C
 	public EntityModel<COLIndex> toModel(COLIndex colIndex) {
 
 		return EntityModel.of(colIndex,
-				 linkTo(methodOn(COLController.class).one(colIndex.getCity())).withSelfRel(),
+				 linkTo(methodOn(COLController.class).getCity(colIndex.getCity())).withSelfRel(),
 			        linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("colindexes"));				
 	}
 }
