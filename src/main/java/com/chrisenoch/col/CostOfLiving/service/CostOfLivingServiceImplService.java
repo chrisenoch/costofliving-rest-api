@@ -44,8 +44,8 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	
 	@Override
 	public COLResults calculateEquivalentSalary(float amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
-		float theBase = repository.findByCity(city1).get().getRate();
-		float theCode= repository.findByCity(city2).get().getRate();
+		float theBase = repository.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1)).getRate();
+		float theCode = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getRate();
 		
 		float total = theBase/theCode * amount;
 		System.out.println("Total: " + total);
