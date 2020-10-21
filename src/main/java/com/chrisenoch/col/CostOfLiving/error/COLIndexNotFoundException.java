@@ -4,12 +4,12 @@ public class COLIndexNotFoundException extends RuntimeException {
 
 
 	public COLIndexNotFoundException(String message, Throwable cause) {
-		super(message, cause);
+		super("The record could not be found. Method called with an argument of: " + message, cause);
 
 	}
 
 	public COLIndexNotFoundException(String message) {
-		super(message);
+		super("The record could not be found. Method called with an argument of: " + message);
 
 	}
 

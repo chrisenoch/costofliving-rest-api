@@ -2,6 +2,7 @@ package com.chrisenoch.col.CostOfLiving.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public COLIndex findByCity( String city) {
+	public Optional<COLIndex>findByCity( String city) {
 		return repository.findByCity(city);
 	}
 	
@@ -42,8 +43,8 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	
 	@Override
 	public COLResults calculateEquivalentSalary(float amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
-		float theBase = repository.findByCity(city1).getRate();
-		float theCode= repository.findByCity(city2).getRate();
+		float theBase = repository.findByCity(city1).get().getRate();
+		float theCode= repository.findByCity(city2).get().getRate();
 		
 		float total = theBase/theCode * amount;
 		System.out.println("Total: " + total);

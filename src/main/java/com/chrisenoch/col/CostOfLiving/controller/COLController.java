@@ -26,6 +26,7 @@ import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssembler;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssemblerNew;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
+import com.chrisenoch.col.CostOfLiving.error.COLIndexNotFoundException;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 
 @RestController
@@ -64,7 +65,7 @@ public class COLController extends RepresentationModel<COLController> {
 	@GetMapping("/colindexes/{city}")
 	  public EntityModel<COLIndex> getCity(@PathVariable String city) {
 
-	   COLIndex colIndex =  costOfLivingService.findByCity(city);
+	   COLIndex colIndex =  costOfLivingService.findByCity(city).orElseThrow(()-> new COLIndexNotFoundException(city));
 	   
 	   return EntityModel.of(colIndex
 			   ,  linkTo(methodOn(COLController.class).getCity(city)).withSelfRel(),
@@ -74,7 +75,7 @@ public class COLController extends RepresentationModel<COLController> {
 	@GetMapping("/colindexesassembler/{city}")
 	  public EntityModel<COLIndex> colindexesassembler (@PathVariable String city) {
 
-	   COLIndex colIndex =  costOfLivingService.findByCity(city);
+	   COLIndex colIndex =  costOfLivingService.findByCity(city).orElseThrow(()-> new COLIndexNotFoundException(city));
 	   
 	   return assembler.toModel(colIndex);	   
 	  }
@@ -82,7 +83,7 @@ public class COLController extends RepresentationModel<COLController> {
 	@GetMapping("/colindexesassemblerre/{city}")
 	  public ResponseEntity<EntityModel<COLIndex>> colindexesassemblerre (@PathVariable String city) {
 
-	   COLIndex colIndex =  costOfLivingService.findByCity(city);
+	   COLIndex colIndex =  costOfLivingService.findByCity(city).orElseThrow(()-> new COLIndexNotFoundException(city));
 	   
 	   return new ResponseEntity<EntityModel<COLIndex>> (assembler.toModel(colIndex), HttpStatus.OK);	   
 	  }
@@ -230,7 +231,8 @@ public class COLController extends RepresentationModel<COLController> {
 
 		//create instance of COLIndex from city value
 		base = base.toUpperCase();
-		COLIndex colIndex = costOfLivingService.findByCity(base);
+		String baseErrorMessage = base; //defined because argument in orElseThrow must be final or effectively final
+		COLIndex colIndex = costOfLivingService.findByCity(base).orElseThrow(()-> new COLIndexNotFoundException(baseErrorMessage));
 		System.out.println("colIndex value " + colIndex);
 		
 		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);

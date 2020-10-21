@@ -2,11 +2,10 @@ package com.chrisenoch.col.CostOfLiving.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-
-import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
+import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 
 
 public interface CostOfLivingService {
@@ -20,6 +19,6 @@ public interface CostOfLivingService {
 	
 	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex,  String country);
 	
-	public COLIndex findByCity(String city);
+	public Optional<COLIndex> findByCity(String city);
 	
 }
