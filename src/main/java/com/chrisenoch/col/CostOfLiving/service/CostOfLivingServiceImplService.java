@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.chrisenoch.col.CostOfLiving.annotation.ToUpper;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
+import com.chrisenoch.col.CostOfLiving.error.COLIndexNotFoundException;
 import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 
 @Service
@@ -36,7 +37,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLIndex> findColIndexesByCountry(@ToUpper String country){
+	public Optional<List<COLIndex>> findColIndexesByCountry(@ToUpper String country){
 		System.out.println("Inside findColIndexesByCountry " + country);
 		return repository.findByCountry(country);
 	}
@@ -54,7 +55,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	
 	@Override
 	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
-		List<COLIndex> COLIndexes = findColIndexesByCountry(country);
+		List<COLIndex> COLIndexes = findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country));
 		System.out.println("Inside find by country " + country + " " + amount + " " + colIndex.getCity());
 		COLIndexes.forEach(System.out::println);
 		//List<COLResults> results = COLIndexes.stream().mapToDouble(r->r.getRate()).

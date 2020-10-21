@@ -15,7 +15,7 @@ public interface CostOfLivingService {
 	
 	public COLResults calculateEquivalentSalary(float amount, String base, String code);
 	
-	public List<COLIndex> findColIndexesByCountry(String country);
+	public Optional<List<COLIndex>> findColIndexesByCountry(String country);
 	
 	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex,  String country);
 	

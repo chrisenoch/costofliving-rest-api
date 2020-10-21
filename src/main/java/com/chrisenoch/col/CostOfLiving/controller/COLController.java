@@ -142,11 +142,11 @@ public class COLController extends RepresentationModel<COLController> {
 //		System.out.println("List of model");
 		//test123.forEach(System.out::println);
 		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
-		CollectionModel<COLIndexModel> test456 = colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country));
+		CollectionModel<COLIndexModel> test456 = colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country)));
 		System.out.println("Print list below");
 		test456.forEach(System.out::println);
 		
-		return ResponseEntity.ok(colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country)));
+		return ResponseEntity.ok(colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country))));
 		//return new ResponseEntity<CollectionModel<COLIndexModel>>(test123, HttpStatus.OK);
 
 	}
