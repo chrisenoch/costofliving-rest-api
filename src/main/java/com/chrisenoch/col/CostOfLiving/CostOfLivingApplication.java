@@ -16,8 +16,7 @@ import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 import com.chrisenoch.col.CostOfLiving.controller.COLCalculationsController;
 
 @SpringBootApplication
-public class CostOfLivingApplication implements 
-RepresentationModelProcessor<EntityModel<COLCalculationsController>> {
+public class CostOfLivingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CostOfLivingApplication.class, args);
@@ -33,37 +32,6 @@ RepresentationModelProcessor<EntityModel<COLCalculationsController>> {
 			repository.save(new COLIndex("BERLIN","GERMANY", 170F,new Date()));
 			repository.save(new COLIndex("BRISTOL","ENGLAND", 110F,new Date()));
 		};
-	}
-	
-	
-	@Bean
-	public ResourceProcessor<Resource<Taco>> tacoProcessor(EntityLinks links) {
-		return new ResourceProcessor<Resource<Taco>>() {
-			@Override
-			public PagedResources<Resource<Taco>> process(PagedResources<Resource<Taco>> resource) {
-				resource.add(links.linkFor(Taco.class).slash("recent").withRel("recents"));
-				return resource;
-			}
-		};
-	}
-	
-	
-	
-	@Bean
-	public ResourceProcessor<Resource<Taco>> tacoProcessor(EntityLinks links) {
-		return new ResourceProcessor<Resource<Taco>>() {
-			@Override
-			public PagedResources<Resource<Taco>> process(PagedResources<Resource<Taco>> resource) {
-				resource.add(links.linkFor(Taco.class).slash("recent").withRel("recents"));
-				return resource;
-			}
-		};
-	}
-
-	@Override
-	public EntityModel<COLCalculationsController> process(EntityModel<COLCalculationsController> model) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

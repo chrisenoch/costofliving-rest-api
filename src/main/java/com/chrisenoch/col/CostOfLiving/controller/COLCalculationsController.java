@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.chrisenoch.col.CostOfLiving.CostOfLivingConfig2;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
@@ -23,7 +25,7 @@ public class COLCalculationsController {
 	
 	@Autowired
 	CostOfLivingService costOfLivingService;
-	
+
 	@GetMapping("/getIndexes123")
 	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
