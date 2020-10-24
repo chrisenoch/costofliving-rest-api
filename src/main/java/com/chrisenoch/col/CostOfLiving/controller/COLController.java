@@ -44,7 +44,7 @@ public class COLController {
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
 	}
 	
-	//Does not work
+	
 	@GetMapping("/{amount}/{base}/to/{code}")
 	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
@@ -55,7 +55,7 @@ public class COLController {
 
 	}
 	
-	//Does not work
+	
 	@GetMapping("/{amount}/{base}/tocountry/{country}")
 	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
