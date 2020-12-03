@@ -66,7 +66,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 							
 							);
 					return new COLResults(colIndex.getCity()
-				, r.getCity(), amount, colIndex.getRate()/r.getRate() * amount );
+					, r.getCity(), amount, colIndex.getRate()/r.getRate() * amount );
 				
 				}
 				
