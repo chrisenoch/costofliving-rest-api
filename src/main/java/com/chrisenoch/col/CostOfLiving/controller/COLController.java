@@ -18,12 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
-import com.chrisenoch.col.CostOfLiving.entity.COLIndexModel;
-import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssembler;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexModelAssemblerNew;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
