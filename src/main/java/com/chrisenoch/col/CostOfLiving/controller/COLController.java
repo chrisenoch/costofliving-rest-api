@@ -130,14 +130,32 @@ public class COLController extends RepresentationModel<COLController> {
 			return CollectionModel.of(luckytest, linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));
 		} 	
 	
+	@GetMapping("/country/{country}")
+	public CollectionModel<COLIndex> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
+		System.out.println("Inside getIndexesByCountry");
+		//Need to change this so returns a COLIndexes object
+
+		List<COLIndex> colIndexes = costOfLivingService.findColIndexesByCountry(country).get();
+		
+		for (COLIndex colIndex : colIndexes) {
+			//String country = colIndex.getCountry();
+			Link selfLink = linkTo(COLController.class).slash("country").slash(country).withSelfRel();
+			colIndex.add(selfLink);	
+		}
+		
+		Link link = linkTo(COLController.class).withSelfRel();
+		CollectionModel<COLIndex> result = new CollectionModel<>(colIndexes, link);
+		return result;
+	}
+	
 	//@GetMapping("/country/{country}")
-	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
+	public CollectionModel<COLIndexModel> getIndexesByCountryOld(@PathVariable("country") String country) throws Exception{
 		System.out.println("Inside getIndexesByCountry");
 		//Need to change this so returns a COLIndexes object
 		
 		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
 
-		//List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
+		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country).get();
 		//CollectionModel<COLIndexModel> test123 =   colIndexModelAssembler.toCollectionModel(test);
 		
 //		Collection<List<COLIndex>> colIndexCollection = Collections.singleton(test);
@@ -146,21 +164,20 @@ public class COLController extends RepresentationModel<COLController> {
 //		System.out.println("List of model");
 		//test123.forEach(System.out::println);
 		//greeting.add(linkTo(methodOn(COLController.class).getIndexesByCountry()).withSelfRel());
-		CollectionModel<COLIndexModel> test456 = colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country)));
-		System.out.println("Print list below");
-		test456.forEach(System.out::println);
+//		CollectionModel<COLIndexModel> test456 = colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country)));
+//		System.out.println("Print list below");
+//		test456.forEach(System.out::println);
 
-		return ResponseEntity.ok(colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country))));
-		//return new ResponseEntity<CollectionModel<COLIndexModel>>(test123, HttpStatus.OK);
+		//return ResponseEntity.ok(colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country))));
+		return colIndexModelAssembler.toCollectionModel(test);
 
 	}
-	
-	@GetMapping
-	public ResponseEntity<COLIndexes> getIndexesByCountrySimple(@PathVariable("country") String country) throws Exception{
-		//CollectionModel<Person> model = CollectionModel.of(people);
-		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexesByCountry(country), new Date()),HttpStatus.OK);
-	}
+
+//	@GetMapping("/country/{country}")
+//	public ResponseEntity<COLIndexes> getIndexesByCountryExample(@PathVariable("country") String country) throws Exception{
+//		
+//		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexesByCountry(country).get(), new Date()),HttpStatus.OK);
+//	}
 	
 	
 //	@GetMapping("/countrya/{country}")

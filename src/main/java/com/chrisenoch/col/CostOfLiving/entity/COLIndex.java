@@ -13,7 +13,7 @@ import org.springframework.hateoas.RepresentationModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class COLIndex {
+public class COLIndex extends RepresentationModel<COLIndexModel> {
 	
 	@Id
 	private String city;
