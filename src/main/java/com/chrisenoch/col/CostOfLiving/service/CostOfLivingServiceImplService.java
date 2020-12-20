@@ -26,7 +26,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public Optional<COLIndex>findByCity( String city) {
+	public Optional<COLIndex>findByCity(@ToUpper String city) {
 		return repository.findByCity(city);
 	}
 	

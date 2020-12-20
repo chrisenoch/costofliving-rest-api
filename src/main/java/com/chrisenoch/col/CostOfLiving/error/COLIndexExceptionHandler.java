@@ -20,7 +20,7 @@ public class COLIndexExceptionHandler {
 		error.setTimeStamp(System.currentTimeMillis());
 		
 		//return ResponseEntity
-		
+		  
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 
 	}
