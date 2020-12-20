@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
@@ -72,6 +73,7 @@ public class COLController extends RepresentationModel<COLController> {
 			      linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));		   
 	  }
 	
+	
 	@GetMapping("/colindexesassembler/{city}")
 	  public EntityModel<COLIndex> colindexesassembler (@PathVariable String city) {
 
@@ -79,6 +81,7 @@ public class COLController extends RepresentationModel<COLController> {
 	   
 	   return assembler.toModel(colIndex);	   
 	  }
+	
 	
 	@GetMapping("/colindexesassemblerre/{city}")
 	  public ResponseEntity<EntityModel<COLIndex>> colindexesassemblerre (@PathVariable String city) {
@@ -127,8 +130,9 @@ public class COLController extends RepresentationModel<COLController> {
 			return CollectionModel.of(luckytest, linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));
 		} 	
 	
-	@GetMapping("/country/{country}")
+	//@GetMapping("/country/{country}")
 	public ResponseEntity<CollectionModel<COLIndexModel>> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
+		System.out.println("Inside getIndexesByCountry");
 		//Need to change this so returns a COLIndexes object
 		
 		COLIndexModelAssembler colIndexModelAssembler = new COLIndexModelAssembler();
@@ -145,11 +149,19 @@ public class COLController extends RepresentationModel<COLController> {
 		CollectionModel<COLIndexModel> test456 = colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country)));
 		System.out.println("Print list below");
 		test456.forEach(System.out::println);
-		
+
 		return ResponseEntity.ok(colIndexModelAssembler.toCollectionModel(costOfLivingService.findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country))));
 		//return new ResponseEntity<CollectionModel<COLIndexModel>>(test123, HttpStatus.OK);
 
 	}
+	
+	@GetMapping
+	public ResponseEntity<COLIndexes> getIndexesByCountrySimple(@PathVariable("country") String country) throws Exception{
+		//CollectionModel<Person> model = CollectionModel.of(people);
+		
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexesByCountry(country), new Date()),HttpStatus.OK);
+	}
+	
 	
 //	@GetMapping("/countrya/{country}")
 //	public ResponseEntity<CollectionModel<COLIndex>> getIndexesByCountry2(@PathVariable("country") String country) throws Exception{
