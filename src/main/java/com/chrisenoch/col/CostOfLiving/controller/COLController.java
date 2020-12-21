@@ -75,18 +75,6 @@ public class COLController extends RepresentationModel<COLController> {
 		System.out.println("colIndex value " + colIndex);
 		
 		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
-
-	}
-	
-	
-	@GetMapping("/gethateoas")
-	public EntityModel<COLIndex>getHateoas() throws Exception{
-		COLIndex rate = new COLIndex("Birmingmam", "England", 1456F, new Date());
-		EntityModel<COLIndex> model = EntityModel.of(rate);
-		model.add(Link.of("http://localhost:8080/costofliving/123"));
-		//rate.add(Link.of("http://localhost:8080/costofliving/123"));
-		
-		return model;
 	}
 	
 	@GetMapping("/colindexes/{city}")
@@ -171,6 +159,17 @@ public class COLController extends RepresentationModel<COLController> {
 		CollectionModel<COLIndex> result = CollectionModel.of(colIndexes, link);
 		return result;
 	}
+	
+	//Practice 
+		@GetMapping("/gethateoas")
+		public EntityModel<COLIndex>getHateoas() throws Exception{
+			COLIndex rate = new COLIndex("Birmingmam", "England", 1456F, new Date());
+			EntityModel<COLIndex> model = EntityModel.of(rate);
+			model.add(Link.of("http://localhost:8080/costofliving/123"));
+			//rate.add(Link.of("http://localhost:8080/costofliving/123"));
+			
+			return model;
+		}
 	
 
 }

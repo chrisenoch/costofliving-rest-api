@@ -14,11 +14,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.chrisenoch.col.CostOfLiving.controller.COLController;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
@@ -165,6 +167,36 @@ class CostOfLivingApplicationTests {
 		.andDo(print()).andExpect(status().isOk());	
 
 	}
+	
+	@Test
+	public void shouldReturnColIndexesByCity() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes/tokyo"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(content().json("{\"city\":\"TOKYO\","
+				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
+				+ "\"http://localhost/costofliving/colindexes/tokyo\"},\"COLIndexes"
+				+ "\":{\"href\":\"http://localhost/costofliving/colindexes\"}}}"))
+		.andReturn();
+
+		
+		System.out.println("JSON as String: " + result.getResponse().getContentAsString());
+
+	}
+	
+	@Test
+	public void shouldReturnColIndexesByCityFromAssembler() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassembler/tokyo"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(content().string(containsString("{\"city\":\"TOKYO\","
+				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
+				+ "\"http://localhost/costofliving/colindexes/TOKYO\"},\"colindexes"
+				+ "\":{\"href\":\"http://localhost/costofliving/colindexes\"}}}")))
+		.andReturn();
+
+		
+		System.out.println("JSON as String: " + result.getResponse().getContentAsString());
+
+	} 
 	
 	
 	
