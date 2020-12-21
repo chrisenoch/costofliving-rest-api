@@ -14,11 +14,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -187,16 +188,63 @@ class CostOfLivingApplicationTests {
 	public void shouldReturnColIndexesByCityFromAssembler() throws Exception {
 		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassembler/tokyo"))
 		.andDo(print()).andExpect(status().isOk())
-		.andExpect(content().string(containsString("{\"city\":\"TOKYO\","
+		.andExpect(content().json("{\"city\":\"TOKYO\","
 				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
 				+ "\"http://localhost/costofliving/colindexes/TOKYO\"},\"colindexes"
-				+ "\":{\"href\":\"http://localhost/costofliving/colindexes\"}}}")))
+				+ "\":{\"href\":\"http://localhost/costofliving/colindexes\"}}}"))
 		.andReturn();
 
 		
 		System.out.println("JSON as String: " + result.getResponse().getContentAsString());
 
 	} 
+	
+	@Test
+	public void shouldReturnColIndexesByCityFromAssemblerReturnedAsResponseEntity() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassemblerre/tokyo"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(content().json("{\"city\":\"TOKYO\","
+				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
+				+ "\"http://localhost/costofliving/colindexes/TOKYO\"},\"colindexes"
+				+ "\":{\"href\":\"http://localhost/costofliving/colindexes\"}}}"))
+		.andReturn();
+
+		
+		System.out.println("JSON as String: " + result.getResponse().getContentAsString());
+
+	}
+	
+	@Test
+	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+	public void shouldReturnAllCOLIndexes() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(content().json("{\"_embedded\":{\"cOLIndexList\":[{\"city\":\"TOKYO\""
+				+ ",\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":"
+				+ "{\"href\":\"http://localhost/costofliving/colindexes/TOKYO\"},\""
+				+ "COLIndexes\":{\"href\":\"http://localhost/costofliving/colindexes\"}}},"
+				+ "{\"city\":\"LONDON\",\"country\":\"ENGLAND\",\"rate\":140.0,\"_links\":{\"self\":"
+				+ "{\"href\":\"http://localhost/costofliving/colindexes/LONDON\"},\"COLIndexes\":"
+				+ "{\"href\":\"http://localhost/costofliving/colindexes\"}}},{\"city\":\"SHANGHAI\","
+				+ "\"country\":\"CHINA\",\"rate\":30.0,\"_links\":{\"self\":{\"href\":\""
+				+ "http://localhost/costofliving/colindexes/SHANGHAI\"},\"COLIndexes\":"
+				+ "{\"href\":\"http://localhost/costofliving/colindexes\"}}},{\"city\":\"MADRID\""
+				+ ",\"country\":\"SPAIN\",\"rate\":230.0,\"_links\":{\"self\":{\"href\":\""
+				+ "http://localhost/costofliving/colindexes/MADRID\"},\"COLIndexes\""
+				+ ":{\"href\":\"http://localhost/costofliving/colindexes\"}}},{\"city\""
+				+ ":\"BERLIN\",\"country\":\"GERMANY\",\"rate\":170.0,\"_links\":{\"self\":{\"href\""
+				+ ":\"http://localhost/costofliving/colindexes/BERLIN\"},\"COLIndexes\":{\"href\""
+				+ ":\"http://localhost/costofliving/colindexes\"}}},{\"city\":\"BRISTOL\",\"country\""
+				+ ":\"ENGLAND\",\"rate\":110.0,\"_links\":{\"self\":{\"href\":\"http://localhost"
+				+ "/costofliving/colindexes/BRISTOL\"},\"COLIndexes\":{\"href\":\"http://localhost"
+				+ "/costofliving/colindexes\"}}}]},\"_links\":{\"COLIndexes\":{\"href\":\"http://localhost"
+				+ "/costofliving/colindexes\"}}}"))
+		.andReturn();
+
+		
+		System.out.println("JSON as String: " + result.getResponse().getContentAsString());
+
+	}
 	
 	
 	
