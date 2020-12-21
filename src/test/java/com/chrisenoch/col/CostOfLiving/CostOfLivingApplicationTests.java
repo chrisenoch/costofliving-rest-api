@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,8 +68,8 @@ class CostOfLivingApplicationTests {
 	@Test
 	public void shouldReturnCOLIndexesAndDate() throws Exception {
 		
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String date = simpleDateFormat.format(new Date());
+		String todayFormatted = OffsetDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+		
 		 
 		List<COLIndex> colIndexes = initCOLIndexes();
 		
@@ -87,7 +89,7 @@ class CostOfLivingApplicationTests {
 		.andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(5)))))
 		.andExpect(content()
-				.string(containsString(date)))
+				.string(containsString(todayFormatted)))
 		
 		.andDo(print()).andExpect(status().isOk());	
 
@@ -95,14 +97,16 @@ class CostOfLivingApplicationTests {
 	
 	@Test
 	public void shouldReturnCOLIndexesByDate() throws Exception {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-		Date yesterday = yesterday();
-		Date tomorrow = tomorrow();
+		OffsetDateTime yesterday = OffsetDateTime.now().minusDays(1L);
+		OffsetDateTime tomorrow = OffsetDateTime.now().plusDays(1L);
 		
-		String todayFormatted = simpleDateFormat.format(new Date());
-		String yesterdayFormatted = simpleDateFormat.format(yesterday());
-		String tomorrowFormatted = simpleDateFormat.format(tomorrow());
+		String todayFormatted = OffsetDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+		String yesterdayFormatted = yesterday.format(DateTimeFormatter.ISO_LOCAL_DATE);
+		String tomorrowFormatted = tomorrow.format(DateTimeFormatter.ISO_LOCAL_DATE);
+		
+//		String todayFormatted = simpleDateFormat.format(new Date());
+//		String yesterdayFormatted = simpleDateFormat.format(yesterday());
+//		String tomorrowFormatted = simpleDateFormat.format(tomorrow());
 		
 		COLIndex colIndex7 = new COLIndex("PARIS","FRANCE", 70F,yesterday);
 		COLIndex colIndex8 = new COLIndex("PERU","LIMA", 140F,tomorrow);
@@ -262,12 +266,12 @@ class CostOfLivingApplicationTests {
 
 	
 	private List<COLIndex> initCOLIndexes() {	
-		COLIndex colIndex = new COLIndex("TOKYO","JAPAN", 70F,new Date());
-		COLIndex colIndex2 = new COLIndex("LONDON","ENGLAND", 140F,new Date());
-		COLIndex colIndex3 = new COLIndex("SHANGHAI", "CHINA",30F,new Date());
-		COLIndex colIndex4 = new COLIndex("MADRID", "SPAIN",230F,new Date());
-		COLIndex colIndex5 = new COLIndex("BERLIN","GERMANY", 170F,new Date());
-		COLIndex colIndex6 = new COLIndex("BRISTOL","ENGLAND", 110F,new Date());
+		COLIndex colIndex = new COLIndex("TOKYO","JAPAN", 70F,OffsetDateTime.now());
+		COLIndex colIndex2 = new COLIndex("LONDON","ENGLAND", 140F,OffsetDateTime.now());
+		COLIndex colIndex3 = new COLIndex("SHANGHAI", "CHINA",30F,OffsetDateTime.now());
+		COLIndex colIndex4 = new COLIndex("MADRID", "SPAIN",230F,OffsetDateTime.now());
+		COLIndex colIndex5 = new COLIndex("BERLIN","GERMANY", 170F,OffsetDateTime.now());
+		COLIndex colIndex6 = new COLIndex("BRISTOL","ENGLAND", 110F,OffsetDateTime.now());
 		
 		List<COLIndex> colIndexes = Arrays.asList(colIndex, colIndex2, colIndex3
 				, colIndex4, colIndex5, colIndex6);

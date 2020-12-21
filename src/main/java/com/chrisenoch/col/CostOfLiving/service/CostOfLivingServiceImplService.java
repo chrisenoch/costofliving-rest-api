@@ -1,6 +1,6 @@
 package com.chrisenoch.col.CostOfLiving.service;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLIndex> findColIndexes(Date theDate){
+	public List<COLIndex> findColIndexes(OffsetDateTime theDate){
 		System.out.println("Inside find by date");
 		return repository.findByDate(theDate);
 	}
@@ -78,18 +78,6 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 		return results;
 	}
 		
- 
-	
-	/*
-	 * 		//Find by country - List
-		//Iterate list and create new COLResults for each object in the list 
-			// ...using the value of city1 from method param and city2 from object
-		//Return List of COLResults
-	 */
-	
-	
-	
-
 }
 
 

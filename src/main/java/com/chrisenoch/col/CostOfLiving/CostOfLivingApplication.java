@@ -1,6 +1,7 @@
 package com.chrisenoch.col.CostOfLiving;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,12 +21,12 @@ public class CostOfLivingApplication {
 	@Bean
 	public CommandLineRunner data(RateRepository repository) {
 		return (args) -> {
-			repository.save(new COLIndex("TOKYO","JAPAN", 70F,new Date()));
-			repository.save(new COLIndex("LONDON","ENGLAND", 140F,new Date()));
-			repository.save(new COLIndex("SHANGHAI", "CHINA",30F,new Date()));
-			repository.save(new COLIndex("MADRID", "SPAIN",230F,new Date()));
-			repository.save(new COLIndex("BERLIN","GERMANY", 170F,new Date()));
-			repository.save(new COLIndex("BRISTOL","ENGLAND", 110F,new Date()));
+			repository.save(new COLIndex("TOKYO","JAPAN", 70F,OffsetDateTime.now()));
+			repository.save(new COLIndex("LONDON","ENGLAND", 140F,OffsetDateTime.now()));
+			repository.save(new COLIndex("SHANGHAI", "CHINA",30F,OffsetDateTime.now()));
+			repository.save(new COLIndex("MADRID", "SPAIN",230F,OffsetDateTime.now()));
+			repository.save(new COLIndex("BERLIN","GERMANY", 170F,OffsetDateTime.now()));
+			repository.save(new COLIndex("BRISTOL","ENGLAND", 110F,OffsetDateTime.now()));
 		};
 	}
 

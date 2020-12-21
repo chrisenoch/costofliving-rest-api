@@ -1,12 +1,11 @@
 package com.chrisenoch.col.CostOfLiving.entity;
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.springframework.hateoas.RepresentationModel;
 
@@ -21,8 +20,7 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 	private float rate;
 	
 	@JsonIgnore 
-	@Temporal(TemporalType.DATE)
-	Date date;
+	OffsetDateTime date;
 
 	public String getCity() {
 		return city;
@@ -40,11 +38,11 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 		this.rate = rate;
 	}
 
-	public Date getDate() {
+	public OffsetDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(OffsetDateTime date) {
 		this.date = date;
 	}
 
@@ -56,7 +54,7 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 		this.country = country;
 	}
 
-	public COLIndex(String city, String country, float rate, Date date) {
+	public COLIndex(String city, String country, float rate, OffsetDateTime date) {
 		this.city = city;
 		this.country = country;
 		this.rate = rate;

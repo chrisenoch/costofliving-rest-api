@@ -3,7 +3,8 @@ package com.chrisenoch.col.CostOfLiving.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,12 +46,12 @@ public class COLController extends RepresentationModel<COLController> {
 	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
 		//CollectionModel<Person> model = CollectionModel.of(people);
 		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), OffsetDateTime.now()),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{date}")
-	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
+	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)OffsetDateTime date) throws Exception{
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), OffsetDateTime.now()),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{amount}/{base}/to/{code}")
@@ -163,7 +164,7 @@ public class COLController extends RepresentationModel<COLController> {
 	//Practice 
 		@GetMapping("/gethateoas")
 		public EntityModel<COLIndex>getHateoas() throws Exception{
-			COLIndex rate = new COLIndex("Birmingmam", "England", 1456F, new Date());
+			COLIndex rate = new COLIndex("Birmingmam", "England", 1456F, OffsetDateTime.now());
 			EntityModel<COLIndex> model = EntityModel.of(rate);
 			model.add(Link.of("http://localhost:8080/costofliving/123"));
 			//rate.add(Link.of("http://localhost:8080/costofliving/123"));
