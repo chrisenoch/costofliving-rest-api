@@ -4,12 +4,13 @@ package com.chrisenoch.col.CostOfLiving.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class COLIndexes {
 	
 	private List<COLIndex> rates;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm z")
 	private Date date;
 	
 	

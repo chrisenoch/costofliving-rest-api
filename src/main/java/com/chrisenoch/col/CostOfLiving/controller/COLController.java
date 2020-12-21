@@ -41,6 +41,42 @@ public class COLController extends RepresentationModel<COLController> {
 		this.assembler = assembler;
 	}
 
+	@GetMapping
+	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
+		//CollectionModel<Person> model = CollectionModel.of(people);
+		
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
+	}
+	
+	@GetMapping("/{date}")
+	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
+	}
+	
+	@GetMapping("/{amount}/{base}/to/{code}")
+	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
+			, @PathVariable("base")String base
+			, @PathVariable("code")String code) {
+		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
+
+		return new ResponseEntity<COLResults>(costOfLivingService.calculateEquivalentSalary(amount, base, code), HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/{amount}/{base}/tocountry/{country}")
+	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
+			, @PathVariable("base")String base
+			, @PathVariable("country")String country) {
+
+		//create instance of COLIndex from city value
+		base = base.toUpperCase();
+		String baseErrorMessage = base; //defined because argument in orElseThrow must be final or effectively final
+		COLIndex colIndex = costOfLivingService.findByCity(base).orElseThrow(()-> new COLIndexNotFoundException(baseErrorMessage));
+		System.out.println("colIndex value " + colIndex);
+		
+		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
+
+	}
 	
 	
 	@GetMapping("/gethateoas")
@@ -51,13 +87,6 @@ public class COLController extends RepresentationModel<COLController> {
 		//rate.add(Link.of("http://localhost:8080/costofliving/123"));
 		
 		return model;
-	}
-
-	@GetMapping
-	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
-		//CollectionModel<Person> model = CollectionModel.of(people);
-		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
 	}
 	
 	@GetMapping("/colindexes/{city}")
@@ -112,8 +141,6 @@ public class COLController extends RepresentationModel<COLController> {
 			   	   
 	  }
 	
-	
-	
 	@GetMapping("/colindexes")
 	public CollectionModel<EntityModel<COLIndex>> getIndexesHATEOAS(){
 			List<EntityModel<COLIndex>> luckytest= costOfLivingService.findColIndexes()
@@ -144,76 +171,6 @@ public class COLController extends RepresentationModel<COLController> {
 		CollectionModel<COLIndex> result = CollectionModel.of(colIndexes, link);
 		return result;
 	}
-	
-	@GetMapping("/{date}")
-	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
-	}
-	
-	@GetMapping("/{amount}/{base}/to/{code}")
-	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
-			, @PathVariable("base")String base
-			, @PathVariable("code")String code) {
-		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
-
-		return new ResponseEntity<COLResults>(costOfLivingService.calculateEquivalentSalary(amount, base, code), HttpStatus.OK);
-
-	}
-	
-	@GetMapping("/{amount}/{base}/tocountry/{country}")
-	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
-			, @PathVariable("base")String base
-			, @PathVariable("country")String country) {
-
-		//create instance of COLIndex from city value
-		base = base.toUpperCase();
-		String baseErrorMessage = base; //defined because argument in orElseThrow must be final or effectively final
-		COLIndex colIndex = costOfLivingService.findByCity(base).orElseThrow(()-> new COLIndexNotFoundException(baseErrorMessage));
-		System.out.println("colIndex value " + colIndex);
-		
-		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
-
-	}
-	
-	Link link = linkTo(COLController.class).withRel("people");
-	
-	
-	/*
-	 * 	@GetMapping("/{amount}/{base}/to/{code}")
-	String calculateCol(@PathVariable ("amount") float amount, @PathVariable("base")String base
-			, @PathVariable("code")String code) {
-		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
-		
-		costOfLivingService.calculateEquivalentSalary(amount, base, code);
-		
-		return "mainget";
-	}
-	 */
-	
-
-
-	
-	// get rate by base code
-	//get rate by code
-	
-	//calculate the ratio and multiply this by the amount
-	
-	//below are totals, not rates
-	//a = 90  and b = 130
-	// I need to know how much more or less is a compared to b
-	//a/b * amount 
-	
-//	repository.save(new Rate("EUR",0.88857F,new Date()));
-//	repository.save(new Rate("JPY",102.17F,new Date()));
-//	repository.save(new Rate("GBP",0.75705F,new Date()));
-//	repository.save(new Rate("MXN",19.232F,new Date()));
-//	repository.save(new Rate("GBP",0.75705F,new Date()));
-	
-	
-
-	
-
-	//@RequestMapping(path="/new",method = {RequestMethod.POST})
 	
 
 }
