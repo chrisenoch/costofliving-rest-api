@@ -5,6 +5,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +53,16 @@ public class COLController extends RepresentationModel<COLController> {
 	}
 	
 	@GetMapping("/{date}")
-	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)OffsetDateTime date) throws Exception{
+	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") String date) throws Exception{
+		//OffsetDateTime offsetDateTime = date.toInstant().atOffset(ZoneOffset.UTC);
+		System.out.println("Date debugging: " + date);
+		System.out.println("Date debugging: " + new Date());
+		System.out.println("Date debugging: " + LocalDateTime.now());
+		System.out.println("Date debugging: " + OffsetDateTime.now());
+		//System.out.println("Date debugging: " + offsetDateTime);
+		
+		//String dateString = offsetDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+		
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), OffsetDateTime.now()),HttpStatus.OK);
 	}
 	

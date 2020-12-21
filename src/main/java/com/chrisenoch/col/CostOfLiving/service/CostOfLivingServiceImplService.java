@@ -31,7 +31,7 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLIndex> findColIndexes(OffsetDateTime theDate){
+	public List<COLIndex> findColIndexes(String theDate){
 		System.out.println("Inside find by date");
 		return repository.findByDate(theDate);
 	}

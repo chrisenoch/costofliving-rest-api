@@ -11,7 +11,7 @@ import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 public interface CostOfLivingService {
 	public List<COLIndex> findColIndexes();
 	
-	public List<COLIndex> findColIndexes(OffsetDateTime theDate);
+	public List<COLIndex> findColIndexes(String theDate);
 	
 	public COLResults calculateEquivalentSalary(float amount, String base, String code);
 	

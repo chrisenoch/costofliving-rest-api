@@ -10,7 +10,7 @@ public class COLIndexes {
 	
 	private List<COLIndex> rates;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private OffsetDateTime date;
 	
 	
