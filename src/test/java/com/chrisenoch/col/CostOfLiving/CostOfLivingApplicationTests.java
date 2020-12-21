@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.web.servlet.MockMvc;
@@ -72,7 +73,7 @@ class CostOfLivingApplicationTests {
 		
 		
 		//this.mockMvc.perform(get("/costofliving").content.(objectMapper.writeValueAsString(colIndex)).).andDo(print()).andExpect(status().isOk());
-		this.mockMvc.perform(get("/costofliving")).andExpect(content()
+		this.mockMvc.perform(get("/costofliving").contentType(MediaType.APPLICATION_JSON)).andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(0)))))
 		.andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(1)))))
@@ -113,7 +114,7 @@ class CostOfLivingApplicationTests {
 		
 		
 		//this.mockMvc.perform(get("/costofliving").content.(objectMapper.writeValueAsString(colIndex)).).andDo(print()).andExpect(status().isOk());
-		this.mockMvc.perform(get("/costofliving/" + todayFormatted)).andExpect(content()
+		this.mockMvc.perform(get("/costofliving/" + todayFormatted).contentType(MediaType.APPLICATION_JSON)).andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(0)))))
 		.andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(1)))))
@@ -146,7 +147,7 @@ class CostOfLivingApplicationTests {
  	
 		COLResults expectedResults = new COLResults("TOKYO", "LONDON", 200, 100);
 		
-		this.mockMvc.perform(get("/costofliving/200/tokyo/to/london"))
+		this.mockMvc.perform(get("/costofliving/200/tokyo/to/london").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(content()
 				.string((containsString(objectMapper.writeValueAsString(expectedResults)))))	
 		
@@ -160,7 +161,7 @@ class CostOfLivingApplicationTests {
 		COLResults expectedResults = new COLResults("TOKYO", "LONDON", 200, 100);
 		COLResults expectedResults2 = new COLResults("TOKYO", "BRISTOL", 200, 127.27273F);
 		
-		this.mockMvc.perform(get("/costofliving/200/tokyo/tocountry/england"))
+		this.mockMvc.perform(get("/costofliving/200/tokyo/tocountry/england").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(content()
 				.string((containsString(objectMapper.writeValueAsString(expectedResults)))))	
 		.andExpect(content()
@@ -171,7 +172,7 @@ class CostOfLivingApplicationTests {
 	
 	@Test
 	public void shouldReturnColIndexesByCity() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes/tokyo"))
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes/tokyo").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(content().json("{\"city\":\"TOKYO\","
 				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
@@ -186,7 +187,7 @@ class CostOfLivingApplicationTests {
 	
 	@Test
 	public void shouldReturnColIndexesByCityFromAssembler() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassembler/tokyo"))
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassembler/tokyo").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(content().json("{\"city\":\"TOKYO\","
 				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
@@ -201,7 +202,7 @@ class CostOfLivingApplicationTests {
 	
 	@Test
 	public void shouldReturnColIndexesByCityFromAssemblerReturnedAsResponseEntity() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassemblerre/tokyo"))
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexesassemblerre/tokyo").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(content().json("{\"city\":\"TOKYO\","
 				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
@@ -217,7 +218,7 @@ class CostOfLivingApplicationTests {
 	@Test
 	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void shouldReturnAllCOLIndexes() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes"))
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(content().json("{\"_embedded\":{\"cOLIndexList\":[{\"city\":\"TOKYO\""
 				+ ",\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":"
@@ -246,7 +247,19 @@ class CostOfLivingApplicationTests {
 
 	}
 	
-	
+	@Test
+	public void shouldReturnCostOfLivingForCitiesInRequestedCountryWithLinks()  throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/costofliving/country/England").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(content().json("\n"
+				+ "{\"_embedded\":{\"cOLIndexList\":[{\"city\":\"LONDON\",\"country\":\"ENGLAND\""
+				+ ",\"rate\":140.0,\"_links\":{\"self\":{\"href\":\"http://localhost/costofliving"
+				+ "/country/England\"}}},{\"city\":\"BRISTOL\",\"country\":\"ENGLAND\",\"rate\":110.0,\""
+				+ "_links\":{\"self\":{\"href\":\"http://localhost/costofliving/country/England\"}}}]}"
+				+ ",\"_links\":{\"self\":{\"href\":\"http://localhost/costofliving\"}}}"))
+		.andReturn();
+	}
+
 	
 	private List<COLIndex> initCOLIndexes() {	
 		COLIndex colIndex = new COLIndex("TOKYO","JAPAN", 70F,new Date());
