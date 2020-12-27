@@ -21,4 +21,10 @@ public interface CostOfLivingService {
 	
 	public Optional<COLIndex> findByCity(String city);
 	
+	//To practise implementing custom methods using SpringData
+	public List<COLIndex> getRatesByShortCountryName(String country);
+	
+	Optional<List<COLIndex>> findByCountryStartingWith(String country);
+
+	
 }

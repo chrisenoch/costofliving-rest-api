@@ -75,7 +75,18 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 				).collect(Collectors.toList());
 						
 		results.forEach(System.out::println);
-		return results;
+		return results; 
+	}
+
+	@Override
+	//To practise implementing custom methods using SpringData
+	public List<COLIndex> getRatesByShortCountryName(@ToUpper String country){
+		return repository.getRatesByShortCountryName(country);
+	}
+
+	@Override
+	public Optional<List<COLIndex>> findByCountryStartingWith(@ToUpper String country) {
+		return repository.findByCountryStartingWith(country);
 	}
 		
 }

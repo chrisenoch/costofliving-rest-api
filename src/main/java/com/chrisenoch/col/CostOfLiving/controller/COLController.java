@@ -65,6 +65,7 @@ public class COLController extends RepresentationModel<COLController> {
 		
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), OffsetDateTime.now()),HttpStatus.OK);
 	}
+
 	
 	@GetMapping("/{amount}/{base}/to/{code}")
 	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
@@ -171,6 +172,19 @@ public class COLController extends RepresentationModel<COLController> {
 		Link link = linkTo(COLController.class).withSelfRel();
 		CollectionModel<COLIndex> result = CollectionModel.of(colIndexes, link);
 		return result;
+	}
+	
+	//To practise implementing custom methods using SpringData
+	@GetMapping("/customcountry/{country}")
+	public ResponseEntity<COLIndexes> getRatesByShortCountryName(@PathVariable("country") String country) throws Exception{
+		
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.getRatesByShortCountryName(country), OffsetDateTime.now()),HttpStatus.OK);
+	}
+	
+	@GetMapping("/customcountryspringdata/{country}")
+	public ResponseEntity<COLIndexes> getRatesByShortCountryNameSpringData(@PathVariable("country") String country) throws Exception{
+		System.out.println("Debugging Country " + country);
+		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findByCountryStartingWith(country).get(), OffsetDateTime.now()),HttpStatus.OK);
 	}
 	
 	//Practice 

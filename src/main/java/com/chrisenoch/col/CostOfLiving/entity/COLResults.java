@@ -1,4 +1,4 @@
-package com.chrisenoch.col.CostOfLiving.entity;
+ package com.chrisenoch.col.CostOfLiving.entity;
 
 
 public class COLResults {
