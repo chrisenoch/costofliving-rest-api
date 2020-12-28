@@ -1,7 +1,7 @@
 package com.chrisenoch.col.CostOfLiving.entity;
 
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 	@Id
 	private String city;
 	private String country;
-	private float rate;
+	private BigDecimal rate;
 	
 	@JsonIgnore 
 	OffsetDateTime date;
@@ -30,13 +30,6 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 		this.city = city;
 	}
 
-	public float getRate() {
-		return rate;
-	}
-
-	public void setRate(float rate) {
-		this.rate = rate;
-	}
 
 	public OffsetDateTime getDate() {
 		return date;
@@ -53,15 +46,24 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	
+	public BigDecimal getRate() {
+		return rate;
+	}
 
-	public COLIndex(String city, String country, float rate, OffsetDateTime date) {
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
+	}
+
+	public COLIndex() {
+	}
+
+	public COLIndex(String city, String country, BigDecimal rate, OffsetDateTime date) {
+		super();
 		this.city = city;
 		this.country = country;
 		this.rate = rate;
 		this.date = date;
-	}
-	
-	public COLIndex() {
 	}
 
 	@Override

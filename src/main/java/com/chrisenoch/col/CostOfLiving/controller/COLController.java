@@ -3,16 +3,12 @@ package com.chrisenoch.col.CostOfLiving.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -60,7 +56,7 @@ public class COLController extends RepresentationModel<COLController> {
 
 	
 	@GetMapping("/{amount}/{base}/to/{code}")
-	public EntityModel<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
+	public EntityModel<COLResults>calculateCostOfLiving(@PathVariable ("amount") BigDecimal amount
 			, @PathVariable("base")String base
 			, @PathVariable("code")String code) {
 		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
@@ -76,7 +72,7 @@ public class COLController extends RepresentationModel<COLController> {
 	}
 	
 	@GetMapping("/{amount}/{base}/tocountry/{country}")
-	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
+	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable ("amount") BigDecimal amount
 			, @PathVariable("base")String base
 			, @PathVariable("country")String country) {
 
@@ -221,10 +217,9 @@ public class COLController extends RepresentationModel<COLController> {
 	//Practice 
 		@GetMapping("/gethateoas")
 		public EntityModel<COLIndex>getHateoas() throws Exception{
-			COLIndex rate = new COLIndex("Birmingmam", "England", 1456F, OffsetDateTime.now());
+			COLIndex rate = new COLIndex("Birmingmam", "England", BigDecimal.valueOf(1456), OffsetDateTime.now());
 			EntityModel<COLIndex> model = EntityModel.of(rate);
 			model.add(Link.of("http://localhost:8080/costofliving/123"));
-			//rate.add(Link.of("http://localhost:8080/costofliving/123"));
 			
 			return model;
 		}

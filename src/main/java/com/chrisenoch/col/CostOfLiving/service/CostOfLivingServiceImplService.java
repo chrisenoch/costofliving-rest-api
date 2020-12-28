@@ -1,6 +1,7 @@
 package com.chrisenoch.col.CostOfLiving.service;
 
-import java.time.OffsetDateTime;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,18 +44,18 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public COLResults calculateEquivalentSalary(float amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
-		float theBase = repository.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1)).getRate();
-		float theCode = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getRate();
+	public COLResults calculateEquivalentSalary(BigDecimal amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
+		BigDecimal theBase = repository.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1)).getRate();
+		BigDecimal  theCode = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getRate();
 		
-		float total = theBase/theCode * amount;
+		BigDecimal  total = (theBase.divide(theCode, 2, RoundingMode.HALF_EVEN)).multiply(amount);
 		System.out.println("Total: " + total);
 		
 		return new COLResults(city1, city2, amount, total);
 	}
 	
 	@Override
-	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
+	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal amount, COLIndex colIndex, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country));
 		System.out.println("Inside find by country " + country + " " + amount + " " + colIndex.getCity());
 		COLIndexes.forEach(System.out::println);
@@ -68,8 +69,8 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 							
 							);
 					return new COLResults(colIndex.getCity()
-				, r.getCity(), amount, colIndex.getRate()/r.getRate() * amount );
-				
+				, r.getCity(), amount, (colIndex.getRate().divide(r.getRate(), 2, RoundingMode.HALF_EVEN)).multiply(amount));
+				//r.getCity(), amount, colIndex.getRate()/r.getRate() * amount );
 				}
 				
 				).collect(Collectors.toList());
