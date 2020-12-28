@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class COLResults {
 	private String city1;
 	private String city2;
-	private BigDecimal currentSalary;
-	private BigDecimal isWorth;
+	private BigDecimal city1Amount;
+	private BigDecimal city2Equivalent;
 	
 	public String getCity1() {
 		return city1;
@@ -20,23 +20,27 @@ public class COLResults {
 	public void setCity2(String city2) {
 		this.city2 = city2;
 	}
-	public BigDecimal getCurrentSalary() {
-		return currentSalary;
+	public BigDecimal getCity1Amount() {
+		return city1Amount;
 	}
-	public void setCurrentSalary(BigDecimal currentSalary) {
-		this.currentSalary = currentSalary;
+	public void setCity1Amount(BigDecimal city1Amount) {
+		this.city1Amount = city1Amount;
 	}
-	public BigDecimal getIsWorth() {
-		return isWorth;
+	public BigDecimal getCity2Equivalent() {
+		return city2Equivalent;
 	}
-	public void setIsWorth(BigDecimal isWorth) {
-		this.isWorth = isWorth;
+	public void setCity2Equivalent(BigDecimal city2Equivalent) {
+		this.city2Equivalent = city2Equivalent;
 	}
-	public COLResults(String city1, String city2, BigDecimal currentSalary, BigDecimal isWorth) {
+	public COLResults(String city1, String city2, BigDecimal city1Amount, BigDecimal city2Equivalent) {
 		this.city1 = city1;
 		this.city2 = city2;
-		this.currentSalary = currentSalary;
-		this.isWorth = isWorth;
+		this.city1Amount = city1Amount;
+		this.city2Equivalent = city2Equivalent;
 	}
-
+	@Override
+	public String toString() {
+		return "COLResults [city1=" + city1 + ", city2=" + city2 + ", city1Amount=" + city1Amount + ", city2Equivalent="
+				+ city2Equivalent + "]";
+	}
 }

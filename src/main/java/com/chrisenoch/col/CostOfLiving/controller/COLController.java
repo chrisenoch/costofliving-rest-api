@@ -43,13 +43,10 @@ public class COLController extends RepresentationModel<COLController> {
 
 	
 	@GetMapping("/hateoas/{date}")
-	public ResponseEntity<COLIndexes> getRatesByDateHATEOAS(@PathVariable("date") String date) throws Exception{
-		//List<COLIndex> colIndexes = costOfLivingService.findColIndexes(date);
+	public ResponseEntity<COLIndexes> getRatesByDateHATEOAS(@PathVariable("date") String date){
 		
 		List<EntityModel<COLIndex>> colIndexes = costOfLivingService.findColIndexes(date)
 				 .stream().map(assembler::toModel).collect(Collectors.toList());
-		
-		System.out.println("debugging entitymodel: " + colIndexes);
 		
 		return new ResponseEntity<COLIndexes>(new COLIndexes(colIndexes, OffsetDateTime.now()),HttpStatus.OK);
 	}
@@ -71,31 +68,31 @@ public class COLController extends RepresentationModel<COLController> {
 		
 	}
 	
-	@GetMapping("/{amount}/{base}/tocountry/{country}")
-	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable ("amount") BigDecimal amount
-			, @PathVariable("base")String base
+	@GetMapping("/{city1Amount}/{city1}/tocountry/{country}")
+	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable
+			("city1Amount") BigDecimal city1Amount, @PathVariable("city1")String city1
 			, @PathVariable("country")String country) {
 
-		//create instance of COLIndex from city value
-		base = base.toUpperCase();
-		String baseErrorMessage = base; //defined because argument in orElseThrow must be final or effectively final
-		COLIndex colIndex = costOfLivingService.findByCity(base).orElseThrow(()-> new COLIndexNotFoundException(baseErrorMessage));
-		System.out.println("colIndex value " + colIndex);
+		city1 = city1.toUpperCase();
+		final String city1Final = city1; //defined because argument in orElseThrow must be final or effectively final
+		//create instance of COLIndex from city1 value
+		COLIndex colIndexCity1 = costOfLivingService.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1Final ));
+		System.out.println("colIndex value " + colIndexCity1);
 				
-		List<EntityModel<COLResults>> colResultsRespEnt =  costOfLivingService
-				.calculateEquivalentSalaryByCountry(amount, colIndex, country).stream()
+		List<EntityModel<COLResults>> colResultsEntities =  costOfLivingService
+				.calculateEquivalentSalaryByCountry(city1Amount, colIndexCity1, country).stream()
 				.map(a-> EntityModel.of(a,  linkTo(methodOn(COLController.class)
-						.calculateCostOfLivingByCountry( amount
-								,  baseErrorMessage
+						.calculateCostOfLivingByCountry( city1Amount
+								,  city1Final
 								,  country)).withSelfRel())).collect(Collectors.toList());
 		
 //		return new ResponseEntity<List<COLResults>>(costOfLivingService
 //				.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
 	
-		CollectionModel<EntityModel<COLResults>> test = CollectionModel.of(colResultsRespEnt, 
+		CollectionModel<EntityModel<COLResults>> colResultsCollection = CollectionModel.of(colResultsEntities, 
 				   linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withSelfRel());
 		   
-	   return new ResponseEntity<CollectionModel<EntityModel<COLResults>>> (test, HttpStatus.OK);
+	   return new ResponseEntity<CollectionModel<EntityModel<COLResults>>> (colResultsCollection, HttpStatus.OK);
 	
 	}
 	
@@ -141,19 +138,19 @@ public class COLController extends RepresentationModel<COLController> {
 	@GetMapping("/colindexesassemblerre")
 	  public ResponseEntity<CollectionModel<EntityModel<COLIndex>>> getIndexesHATEOASAssemblerResponseEntity() {
 
-	   List<EntityModel<COLIndex>> colIndexes =  costOfLivingService.findColIndexes()
+	   List<EntityModel<COLIndex>> colIndexEntities =  costOfLivingService.findColIndexes()
 			   .stream().map(assembler::toModel).collect(Collectors.toList());
 	   
-	   CollectionModel<EntityModel<COLIndex>>test = CollectionModel.of(colIndexes, 
+	   CollectionModel<EntityModel<COLIndex>>colIndexCollection= CollectionModel.of(colIndexEntities, 
 			   linkTo(methodOn(COLController.class).getIndexesHATEOASAssembler()).withSelfRel());
 	   
-	   return new ResponseEntity<CollectionModel<EntityModel<COLIndex>>> (test, HttpStatus.OK);
+	   return new ResponseEntity<CollectionModel<EntityModel<COLIndex>>> (colIndexCollection, HttpStatus.OK);
 			   	   
 	  }
 	
 	@GetMapping("/colindexes")
 	public CollectionModel<EntityModel<COLIndex>> getIndexesHATEOAS(){
-			List<EntityModel<COLIndex>> luckytest= costOfLivingService.findColIndexes()
+			List<EntityModel<COLIndex>> colIndexEntities= costOfLivingService.findColIndexes()
 					.stream().map(COLIndex-> EntityModel.of(COLIndex,
 							
 							linkTo(methodOn(COLController.class).getCity(COLIndex.getCity())).withSelfRel()
@@ -161,7 +158,7 @@ public class COLController extends RepresentationModel<COLController> {
 					          ))
 				      .collect(Collectors.toList());
 							 
-			return CollectionModel.of(luckytest, linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));
+			return CollectionModel.of(colIndexEntities, linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("COLIndexes"));
 		} 	
 	
 	@GetMapping("/country/{country}")

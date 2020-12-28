@@ -17,7 +17,7 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 	@Id
 	private String city;
 	private String country;
-	private BigDecimal rate;
+	private BigDecimal colIndex;
 	
 	@JsonIgnore 
 	OffsetDateTime date;
@@ -46,30 +46,34 @@ public class COLIndex extends RepresentationModel<COLIndex> {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
-	public BigDecimal getRate() {
-		return rate;
+
+	public BigDecimal getColIndex() {
+		return colIndex;
 	}
 
-	public void setRate(BigDecimal rate) {
-		this.rate = rate;
+	public void setColIndex(BigDecimal colIndex) {
+		this.colIndex = colIndex;
 	}
 
 	public COLIndex() {
 	}
 
-	public COLIndex(String city, String country, BigDecimal rate, OffsetDateTime date) {
-		super();
+	public COLIndex(String city, String country, BigDecimal colIndex, OffsetDateTime date) {
 		this.city = city;
 		this.country = country;
-		this.rate = rate;
+		this.colIndex = colIndex;
 		this.date = date;
 	}
 
 	@Override
 	public String toString() {
-		return "COLIndex [city=" + city + ", country=" + country + ", rate=" + rate + ", date=" + date + "]";
+		return "COLIndex [city=" + city + ", country=" + country + ", colIndex=" + colIndex + ", date=" + date + "]";
 	}
+	
+	
+
+
+
 
 	
 	

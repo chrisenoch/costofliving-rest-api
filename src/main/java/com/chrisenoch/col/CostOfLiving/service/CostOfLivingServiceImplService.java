@@ -44,32 +44,32 @@ public class CostOfLivingServiceImplService implements CostOfLivingService{
 	}
 	
 	@Override
-	public COLResults calculateEquivalentSalary(BigDecimal amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
-		BigDecimal theBase = repository.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1)).getRate();
-		BigDecimal  theCode = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getRate();
+	public COLResults calculateEquivalentSalary(BigDecimal city1Amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
+		BigDecimal colIndexCity1 = repository.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1)).getColIndex();
+		BigDecimal  colIndexCity2 = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getColIndex();
 		
-		BigDecimal  total = (theBase.divide(theCode, 2, RoundingMode.HALF_EVEN)).multiply(amount);
-		System.out.println("Total: " + total);
+		BigDecimal  city2Equivalent = (colIndexCity1.divide(colIndexCity2, 2, RoundingMode.HALF_EVEN)).multiply(city1Amount);
+		System.out.println("Total: " + city2Equivalent);
 		
-		return new COLResults(city1, city2, amount, total);
+		return new COLResults(city1, city2, city1Amount, city2Equivalent);
 	}
 	
 	@Override
-	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal amount, COLIndex colIndex, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
+	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal city1Amount, COLIndex colIndexCity1, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country));
-		System.out.println("Inside find by country " + country + " " + amount + " " + colIndex.getCity());
+		System.out.println("Inside find by country " + country + " " + city1Amount + " " + colIndexCity1.getCity());
 		COLIndexes.forEach(System.out::println);
 		//List<COLResults> results = COLIndexes.stream().mapToDouble(r->r.getRate()).
 		List<COLResults> results = COLIndexes.stream().map(
 				r -> {
-					System.out.println("colIndex.getCity() " + colIndex.getCity() + " " 
+					System.out.println("colIndex.getCity() " + colIndexCity1.getCity() + " " 
 							+ "r.getCity() " +  r.getCity()
-							+ "colIndex.getRate() " + colIndex.getRate()
-							+ "r.getRate() " + r.getRate()
+							+ "colIndex.getRate() " + colIndexCity1.getColIndex()
+							+ "r.getRate() " + r.getColIndex()
 							
 							);
-					return new COLResults(colIndex.getCity()
-				, r.getCity(), amount, (colIndex.getRate().divide(r.getRate(), 2, RoundingMode.HALF_EVEN)).multiply(amount));
+					return new COLResults(colIndexCity1.getCity()
+				, r.getCity(), city1Amount, (colIndexCity1.getColIndex().divide(r.getColIndex(), 2, RoundingMode.HALF_EVEN)).multiply(city1Amount));
 				//r.getCity(), amount, colIndex.getRate()/r.getRate() * amount );
 				}
 				
