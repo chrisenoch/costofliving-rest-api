@@ -45,40 +45,38 @@ public class COLController extends RepresentationModel<COLController> {
 		this.assembler = assembler;
 	}
 
-	@GetMapping
-	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
-		//CollectionModel<Person> model = CollectionModel.of(people);
-		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), OffsetDateTime.now()),HttpStatus.OK);
-	}
 	
-	@GetMapping("/{date}")
-	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") String date) throws Exception{
-		//OffsetDateTime offsetDateTime = date.toInstant().atOffset(ZoneOffset.UTC);
-		System.out.println("Date debugging: " + date);
-		System.out.println("Date debugging: " + new Date());
-		System.out.println("Date debugging: " + LocalDateTime.now());
-		System.out.println("Date debugging: " + OffsetDateTime.now());
-		//System.out.println("Date debugging: " + offsetDateTime);
+	@GetMapping("/hateoas/{date}")
+	public ResponseEntity<COLIndexes> getRatesByDateHATEOAS(@PathVariable("date") String date) throws Exception{
+		//List<COLIndex> colIndexes = costOfLivingService.findColIndexes(date);
 		
-		//String dateString = offsetDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+		List<EntityModel<COLIndex>> colIndexes = costOfLivingService.findColIndexes(date)
+				 .stream().map(assembler::toModel).collect(Collectors.toList());
 		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), OffsetDateTime.now()),HttpStatus.OK);
+		System.out.println("debugging entitymodel: " + colIndexes);
+		
+		return new ResponseEntity<COLIndexes>(new COLIndexes(colIndexes, OffsetDateTime.now()),HttpStatus.OK);
 	}
 
 	
 	@GetMapping("/{amount}/{base}/to/{code}")
-	public ResponseEntity<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
+	public EntityModel<COLResults>calculateCostOfLiving(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
 			, @PathVariable("code")String code) {
 		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
 
-		return new ResponseEntity<COLResults>(costOfLivingService.calculateEquivalentSalary(amount, base, code), HttpStatus.OK);
+		//return new ResponseEntity<COLResults>(costOfLivingService.calculateEquivalentSalary(amount, base, code), HttpStatus.OK);
+		COLResults colResults = costOfLivingService.calculateEquivalentSalary(amount, base, code);
 
+		return EntityModel.of(colResults,
+			      linkTo(methodOn(COLController.class).calculateCostOfLiving(amount, base, code)).withSelfRel() 
+				      ,linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withSelfRel()			
+				);
+		
 	}
 	
 	@GetMapping("/{amount}/{base}/tocountry/{country}")
-	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
+	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
 			, @PathVariable("country")String country) {
 
@@ -87,8 +85,22 @@ public class COLController extends RepresentationModel<COLController> {
 		String baseErrorMessage = base; //defined because argument in orElseThrow must be final or effectively final
 		COLIndex colIndex = costOfLivingService.findByCity(base).orElseThrow(()-> new COLIndexNotFoundException(baseErrorMessage));
 		System.out.println("colIndex value " + colIndex);
+				
+		List<EntityModel<COLResults>> colResultsRespEnt =  costOfLivingService
+				.calculateEquivalentSalaryByCountry(amount, colIndex, country).stream()
+				.map(a-> EntityModel.of(a,  linkTo(methodOn(COLController.class)
+						.calculateCostOfLivingByCountry( amount
+								,  baseErrorMessage
+								,  country)).withSelfRel())).collect(Collectors.toList());
 		
-		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
+//		return new ResponseEntity<List<COLResults>>(costOfLivingService
+//				.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
+	
+		CollectionModel<EntityModel<COLResults>> test = CollectionModel.of(colResultsRespEnt, 
+				   linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withSelfRel());
+		   
+	   return new ResponseEntity<CollectionModel<EntityModel<COLResults>>> (test, HttpStatus.OK);
+	
 	}
 	
 	@GetMapping("/colindexes/{city}")
@@ -176,15 +188,34 @@ public class COLController extends RepresentationModel<COLController> {
 	
 	//To practise implementing custom methods using SpringData
 	@GetMapping("/customcountry/{country}")
-	public ResponseEntity<COLIndexes> getRatesByShortCountryName(@PathVariable("country") String country) throws Exception{
+	public ResponseEntity<COLIndexes> getRatesByShortCountryName(@PathVariable("country") String country){
 		
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.getRatesByShortCountryName(country), OffsetDateTime.now()),HttpStatus.OK);
+		List<EntityModel<COLIndex>> colIndexes = costOfLivingService.getRatesByShortCountryName(country)
+				 .stream().map(a->  EntityModel.of(a, linkTo(methodOn(COLController.class)
+						 .getRatesByShortCountryName(country)).withSelfRel(),
+					        linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withRel("colindexes"))						 
+						 ).collect(Collectors.toList());
+		
+		return new ResponseEntity<COLIndexes>(new COLIndexes(colIndexes, OffsetDateTime.now()),HttpStatus.OK);
 	}
 	
 	@GetMapping("/customcountryspringdata/{country}")
-	public ResponseEntity<COLIndexes> getRatesByShortCountryNameSpringData(@PathVariable("country") String country) throws Exception{
+	public ResponseEntity<CollectionModel<EntityModel<COLIndex>>> getRatesByShortCountryNameSpringData
+	(@PathVariable("country") String country){
 		System.out.println("Debugging Country " + country);
-		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findByCountryStartingWith(country).get(), OffsetDateTime.now()),HttpStatus.OK);
+		
+		
+		List<EntityModel<COLIndex>> colIndexesEntities =  costOfLivingService
+				.findByCountryStartingWith(country).get().stream()
+				.map(a-> EntityModel.of(a,  linkTo(methodOn(COLController.class)
+						.getRatesByShortCountryNameSpringData(country)
+						).withSelfRel())).collect(Collectors.toList());
+		
+	
+		CollectionModel<EntityModel<COLIndex>> colIndexesCollection = CollectionModel.of(colIndexesEntities, 
+				   linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withSelfRel());
+		   
+	   return new ResponseEntity<CollectionModel<EntityModel<COLIndex>>> (colIndexesCollection, HttpStatus.OK);
 	}
 	
 	//Practice 
@@ -197,6 +228,28 @@ public class COLController extends RepresentationModel<COLController> {
 			
 			return model;
 		}
+		
+
+//		@GetMapping
+//		public ResponseEntity<COLIndexes> getIndexes() throws Exception{
+//			//CollectionModel<Person> model = CollectionModel.of(people);
+//			
+//			return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), OffsetDateTime.now()),HttpStatus.OK);
+//		}
+		
+//		@GetMapping("/{date}")
+//		public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") String date) throws Exception{
+//			//OffsetDateTime offsetDateTime = date.toInstant().atOffset(ZoneOffset.UTC);
+//			System.out.println("Date debugging: " + date);
+//			System.out.println("Date debugging: " + new Date());
+//			System.out.println("Date debugging: " + LocalDateTime.now());
+//			System.out.println("Date debugging: " + OffsetDateTime.now());
+//			//System.out.println("Date debugging: " + offsetDateTime);
+//			
+//			//String dateString = offsetDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//			
+//			return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), OffsetDateTime.now()),HttpStatus.OK);
+//		}
 	
 
 }
