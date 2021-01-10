@@ -8,21 +8,21 @@ import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 
 
-public interface CostOfLivingService {
-	public List<COLIndex> findColIndexes();
+ interface CostOfLivingService {
+	 List<COLIndex> findColIndexes();
 	
-	public List<COLIndex> findColIndexes(String theDate);
+	 List<COLIndex> findColIndexes(String theDate);
 	
-	public COLResults calculateEquivalentSalary(BigDecimal amount, String base, String code);
+	 COLResults calculateEquivalentSalary(BigDecimal amount, String base, String code);
 	
-	public Optional<List<COLIndex>> findColIndexesByCountry(String country);
+	 Optional<List<COLIndex>> findColIndexesByCountry(String country);
 	
-	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal amount, COLIndex colIndex,  String country);
+	 List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal amount, COLIndex colIndex,  String country);
 	
-	public Optional<COLIndex> findByCity(String city);
+	 Optional<COLIndex> findByCity(String city);
 	
 	//To practise implementing custom methods using SpringData
-	public List<COLIndex> getRatesByShortCountryName(String country);
+	 List<COLIndex> getRatesByShortCountryName(String country);
 	
 	Optional<List<COLIndex>> findByCountryStartingWith(String country);
 
