@@ -8,7 +8,7 @@ import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 
 
- interface CostOfLivingService {
+ public interface CostOfLivingService {
 	 List<COLIndex> findColIndexes();
 	
 	 List<COLIndex> findColIndexes(String theDate);
