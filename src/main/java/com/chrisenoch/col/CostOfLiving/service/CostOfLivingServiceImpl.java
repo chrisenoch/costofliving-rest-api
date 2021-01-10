@@ -16,7 +16,7 @@ import com.chrisenoch.col.CostOfLiving.error.COLIndexNotFoundException;
 import com.chrisenoch.col.CostOfLiving.repository.RateRepository;
 
 @Service
-public class CostOfLivingServiceImplService implements CostOfLivingService{
+public class CostOfLivingServiceImpl implements CostOfLivingService{
 	
 	@Autowired
 	RateRepository repository;
