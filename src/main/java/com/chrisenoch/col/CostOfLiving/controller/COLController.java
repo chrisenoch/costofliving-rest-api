@@ -42,7 +42,7 @@ public class COLController extends RepresentationModel<COLController> {
 	}
 
 	
-	@GetMapping("/hateoas/{date}")
+	@GetMapping("/{date}")
 	public ResponseEntity<COLIndexes> getRatesByDateHATEOAS(@PathVariable("date") String date){
 		
 		List<EntityModel<COLIndex>> colIndexes = costOfLivingService.findColIndexes(date)
