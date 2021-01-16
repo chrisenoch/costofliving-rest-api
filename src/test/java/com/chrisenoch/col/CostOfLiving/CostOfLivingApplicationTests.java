@@ -73,10 +73,11 @@ class CostOfLivingApplicationTests {
 		
 		 
 		List<COLIndex> colIndexes = initCOLIndexes();
+		System.out.println("Object mapper: " + objectMapper.writeValueAsString(colIndexes.get(0)));
 		
 		
 		//this.mockMvc.perform(get("/costofliving").content.(objectMapper.writeValueAsString(colIndex)).).andDo(print()).andExpect(status().isOk());
-		this.mockMvc.perform(get("/costofliving").contentType(MediaType.APPLICATION_JSON)).andExpect(content()
+		this.mockMvc.perform(get("/costofliving/colindexes").contentType(MediaType.APPLICATION_JSON)).andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(0)))))
 		.andExpect(content()
 				.string(containsString(objectMapper.writeValueAsString(colIndexes.get(1)))))
@@ -150,7 +151,7 @@ class CostOfLivingApplicationTests {
 	@Test
 	public void shouldReturnCostOfLivingForRequestedCity() throws Exception {
  	
-		COLResults expectedResults = new COLResults("TOKYO", "LONDON", BigDecimal.valueOf(200), BigDecimal.valueOf(100));
+		COLResults expectedResults = new COLResults("TOKYO", "LONDON", BigDecimal.valueOf(200), BigDecimal.valueOf(228.00));
 		
 		this.mockMvc.perform(get("/costofliving/200/tokyo/to/london").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(content()
@@ -180,9 +181,33 @@ class CostOfLivingApplicationTests {
 		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes/tokyo").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(content().json("{\"city\":\"TOKYO\","
-				+ "\"country\":\"JAPAN\",\"rate\":70.0,\"_links\":{\"self\":{\"href\":"
+				+ "\"country\":\"JAPAN\",\"colIndex\":89.69,\"_links\":{\"self\":{\"href\":"
 				+ "\"http://localhost/costofliving/colindexes/tokyo\"},\"COLIndexes"
 				+ "\":{\"href\":\"http://localhost/costofliving/colindexes\"}}}"))
+		.andReturn();
+
+		
+		System.out.println("JSON as String: " + result.getResponse().getContentAsString());
+
+	}
+	
+	@Test
+	public void shouldReturnColIndexesByCity2() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/costofliving/colindexes/tokyo").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(content().json("{"
+				+ "  \"city\": \"TOKYO\","
+				+ "  \"country\": \"JAPAN\","
+				+ "  \"colIndex\": 89.69,"
+				+ "  \"_links\": {"
+				+ "    \"self\": {"
+				+ "      \"href\": \"http://localhost/costofliving/colindexes/tokyo\""
+				+ "    },"
+				+ "    \"COLIndexes\": {"
+				+ "      \"href\": \"http://localhost/costofliving/colindexes\""
+				+ "    }"
+				+ "  }"
+				+ "}"))
 		.andReturn();
 
 		
