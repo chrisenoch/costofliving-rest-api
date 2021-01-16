@@ -1,36 +1,44 @@
 package com.chrisenoch.col.CostOfLiving.entity;
 
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
+
+import org.springframework.hateoas.EntityModel;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class COLIndexes {
 	
-	private List<COLIndex> rates;
-	private Date date;
+	private List<EntityModel<COLIndex>> rates;
 	
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+	private OffsetDateTime date;
 	
-	public List<COLIndex> getRates() {
+	public List<EntityModel<COLIndex>> getRates() {
 		return rates;
 	}
-	public void setRates(List<COLIndex> rates) {
-		this.rates = rates;
+	public void setRates(List<EntityModel<COLIndex>> rates) {
+		this.rates= rates;
 	}
-	public Date getDate() {
+ 	
+	public OffsetDateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(OffsetDateTime date) {
 		this.date = date;
 	}
-	public COLIndexes(List<COLIndex> rates, Date date) {
-		this.rates = rates;
-		this.date = date;
+
+	
+	public COLIndexes(List<EntityModel<COLIndex>> colIndexes, OffsetDateTime now) {
+		this.rates = colIndexes;
+		this.date = now;
 	}
+	
 	@Override
 	public String toString() {
 		return "COLIndexes [rates=" + rates + ", date=" + date + "]";
 	}	
-	
-	
+
 
 }

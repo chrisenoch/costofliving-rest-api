@@ -20,6 +20,29 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter</artifactId>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-logging</artifactId>
+		        </exclusion>
+	    	</exclusions>
+		</dependency>
+		
+		
+		<dependency> 
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-log4j</artifactId>
+		  <version>1.3.8.RELEASE</version>
+		</dependency>
+	
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
         <!-- To compile JSP files -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
@@ -50,6 +73,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.commons</groupId>
+		  <artifactId>commons-text</artifactId>
+		  <version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

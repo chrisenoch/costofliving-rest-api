@@ -1,6 +1,8 @@
 package com.chrisenoch.col.CostOfLiving;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,12 +22,12 @@ public class CostOfLivingApplication {
 	@Bean
 	public CommandLineRunner data(RateRepository repository) {
 		return (args) -> {
-			repository.save(new COLIndex("TOKYO","JAPAN", 70F,new Date()));
-			repository.save(new COLIndex("LONDON","ENGLAND", 140F,new Date()));
-			repository.save(new COLIndex("SHANGHAI", "CHINA",30F,new Date()));
-			repository.save(new COLIndex("MADRID", "SPAIN",230F,new Date()));
-			repository.save(new COLIndex("BERLIN","GERMANY", 170F,new Date()));
-			repository.save(new COLIndex("BRISTOL","ENGLAND", 110F,new Date()));
+			repository.save(new COLIndex("TOKYO","JAPAN", BigDecimal.valueOf(89.69),OffsetDateTime.now()));
+			repository.save(new COLIndex("LONDON","ENGLAND", BigDecimal.valueOf(78.83),OffsetDateTime.now()));
+			repository.save(new COLIndex("SHANGHAI", "CHINA",BigDecimal.valueOf(49.25),OffsetDateTime.now()));
+			repository.save(new COLIndex("MADRID", "SPAIN",BigDecimal.valueOf(61.15),OffsetDateTime.now()));
+			repository.save(new COLIndex("BERLIN","GERMANY", BigDecimal.valueOf(67.02),OffsetDateTime.now()));
+			repository.save(new COLIndex("BRISTOL","ENGLAND", BigDecimal.valueOf(69.37),OffsetDateTime.now()));
 		};
 	}
 

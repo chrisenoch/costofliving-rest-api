@@ -1,11 +1,13 @@
-package com.chrisenoch.col.CostOfLiving.entity;
+ package com.chrisenoch.col.CostOfLiving.entity;
 
+import java.math.BigDecimal;
 
 public class COLResults {
 	private String city1;
 	private String city2;
-	private float amount;
-	private float total;
+	private BigDecimal city1Amount;
+	private BigDecimal city2Equivalent;
+	
 	public String getCity1() {
 		return city1;
 	}
@@ -18,30 +20,27 @@ public class COLResults {
 	public void setCity2(String city2) {
 		this.city2 = city2;
 	}
-	public float getAmount() {
-		return amount;
+	public BigDecimal getCity1Amount() {
+		return city1Amount;
 	}
-	public void setAmount(float smount) {
-		this.amount = smount;
+	public void setCity1Amount(BigDecimal city1Amount) {
+		this.city1Amount = city1Amount;
 	}
-	public float getTotal() {
-		return total;
+	public BigDecimal getCity2Equivalent() {
+		return city2Equivalent;
 	}
-	public void setTotal(float total) {
-		this.total = total;
+	public void setCity2Equivalent(BigDecimal city2Equivalent) {
+		this.city2Equivalent = city2Equivalent;
 	}
-	public COLResults(String city1, String city2, float amount, float total) {
-		super();
+	public COLResults(String city1, String city2, BigDecimal city1Amount, BigDecimal city2Equivalent) {
 		this.city1 = city1;
 		this.city2 = city2;
-		this.amount = amount;
-		this.total = total;
+		this.city1Amount = city1Amount;
+		this.city2Equivalent = city2Equivalent;
 	}
 	@Override
 	public String toString() {
-		return "COLResults [city1=" + city1 + ", city2=" + city2 + ", amount=" + amount + ", total=" + total + "]";
+		return "COLResults [city1=" + city1 + ", city2=" + city2 + ", city1Amount=" + city1Amount + ", city2Equivalent="
+				+ city2Equivalent + "]";
 	}
-	
-	
-
 }

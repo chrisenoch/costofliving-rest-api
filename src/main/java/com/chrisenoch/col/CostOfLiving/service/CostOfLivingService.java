@@ -1,25 +1,30 @@
 package com.chrisenoch.col.CostOfLiving.service;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-
-import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.entity.COLIndex;
+import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 
 
-public interface CostOfLivingService {
-	public List<COLIndex> findColIndexes();
+ public interface CostOfLivingService {
+	 List<COLIndex> findColIndexes();
 	
-	public List<COLIndex> findColIndexes(Date theDate);
+	 List<COLIndex> findColIndexes(String theDate);
 	
-	public COLResults calculateEquivalentSalary(float amount, String base, String code);
+	 COLResults calculateEquivalentSalary(BigDecimal amount, String base, String code);
 	
-	public List<COLIndex> findColIndexesByCountry(String country);
+	 Optional<List<COLIndex>> findColIndexesByCountry(String country);
 	
-	public List<COLResults> calculateEquivalentSalaryByCountry(float amount, COLIndex colIndex,  String country);
+	 List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal amount, COLIndex colIndex,  String country);
 	
-	public COLIndex findByCity(String city);
+	 Optional<COLIndex> findByCity(String city);
+	
+	//To practise implementing custom methods using SpringData
+	 List<COLIndex> getRatesByShortCountryName(String country);
+	
+	Optional<List<COLIndex>> findByCountryStartingWith(String country);
+
 	
 }
