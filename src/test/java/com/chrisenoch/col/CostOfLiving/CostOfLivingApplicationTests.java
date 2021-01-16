@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -108,8 +109,8 @@ class CostOfLivingApplicationTests {
 //		String yesterdayFormatted = simpleDateFormat.format(yesterday());
 //		String tomorrowFormatted = simpleDateFormat.format(tomorrow());
 		
-		COLIndex colIndex7 = new COLIndex("PARIS","FRANCE", 70F,yesterday);
-		COLIndex colIndex8 = new COLIndex("PERU","LIMA", 140F,tomorrow);
+		COLIndex colIndex7 = new COLIndex("PARIS","FRANCE", BigDecimal.valueOf(70),yesterday);
+		COLIndex colIndex8 = new COLIndex("PERU","LIMA", BigDecimal.valueOf(140),tomorrow);
 				
 		repository.save(colIndex7);
 		repository.save(colIndex8);
@@ -149,7 +150,7 @@ class CostOfLivingApplicationTests {
 	@Test
 	public void shouldReturnCostOfLivingForRequestedCity() throws Exception {
  	
-		COLResults expectedResults = new COLResults("TOKYO", "LONDON", 200, 100);
+		COLResults expectedResults = new COLResults("TOKYO", "LONDON", BigDecimal.valueOf(200), BigDecimal.valueOf(100));
 		
 		this.mockMvc.perform(get("/costofliving/200/tokyo/to/london").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(content()
@@ -160,10 +161,10 @@ class CostOfLivingApplicationTests {
 	}
 	
 	@Test
-	public void shouldReturnCostOfLivingForCitiesInRequestedCountry() throws Exception {
+	public void shouldReturnCostOfLivingForCitiesInRequestedCountry() throws Exception {  
  	
-		COLResults expectedResults = new COLResults("TOKYO", "LONDON", 200, 100);
-		COLResults expectedResults2 = new COLResults("TOKYO", "BRISTOL", 200, 127.27273F);
+		COLResults expectedResults = new COLResults("TOKYO", "LONDON", BigDecimal.valueOf(200), BigDecimal.valueOf(100));
+		COLResults expectedResults2 = new COLResults("TOKYO", "BRISTOL", BigDecimal.valueOf(200), BigDecimal.valueOf(127.27273));
 		
 		this.mockMvc.perform(get("/costofliving/200/tokyo/tocountry/england").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(content()
@@ -266,12 +267,12 @@ class CostOfLivingApplicationTests {
 
 	
 	private List<COLIndex> initCOLIndexes() {	
-		COLIndex colIndex = new COLIndex("TOKYO","JAPAN", 70F,OffsetDateTime.now());
-		COLIndex colIndex2 = new COLIndex("LONDON","ENGLAND", 140F,OffsetDateTime.now());
-		COLIndex colIndex3 = new COLIndex("SHANGHAI", "CHINA",30F,OffsetDateTime.now());
-		COLIndex colIndex4 = new COLIndex("MADRID", "SPAIN",230F,OffsetDateTime.now());
-		COLIndex colIndex5 = new COLIndex("BERLIN","GERMANY", 170F,OffsetDateTime.now());
-		COLIndex colIndex6 = new COLIndex("BRISTOL","ENGLAND", 110F,OffsetDateTime.now());
+		COLIndex colIndex = new COLIndex("TOKYO","JAPAN", BigDecimal.valueOf(89.69),OffsetDateTime.now());
+		COLIndex colIndex2 = new COLIndex("LONDON","ENGLAND", BigDecimal.valueOf(78.83),OffsetDateTime.now());
+		COLIndex colIndex3 = new COLIndex("SHANGHAI", "CHINA",BigDecimal.valueOf(49.25),OffsetDateTime.now());
+		COLIndex colIndex4 = new COLIndex("MADRID", "SPAIN",BigDecimal.valueOf(61.15),OffsetDateTime.now());
+		COLIndex colIndex5 = new COLIndex("BERLIN","GERMANY",  BigDecimal.valueOf(67.02),OffsetDateTime.now());
+		COLIndex colIndex6 = new COLIndex("BRISTOL","ENGLAND", BigDecimal.valueOf(69.37),OffsetDateTime.now());
 		
 		List<COLIndex> colIndexes = Arrays.asList(colIndex, colIndex2, colIndex3
 				, colIndex4, colIndex5, colIndex6);
