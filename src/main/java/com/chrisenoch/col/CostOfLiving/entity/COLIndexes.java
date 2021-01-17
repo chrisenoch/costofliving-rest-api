@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.springframework.hateoas.EntityModel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class COLIndexes {
 	
 	private List<EntityModel<COLIndex>> rates;
