@@ -2,6 +2,7 @@
 
 Skills demonstrated in this project:
 
+- Spring REST
 - Spring Boot
 - Spring Data 
   - Spring Data REST
