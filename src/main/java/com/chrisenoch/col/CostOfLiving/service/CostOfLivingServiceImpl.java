@@ -33,13 +33,11 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	
 	@Override
 	public List<COLIndex> findColIndexes(String theDate){
-		System.out.println("Inside find by date");
 		return repository.findByDate(theDate);
 	}
 	
 	@Override
 	public Optional<List<COLIndex>> findColIndexesByCountry(@ToUpper String country){
-		System.out.println("Inside findColIndexesByCountry " + country);
 		return repository.findByCountry(country);
 	}
 	
@@ -49,7 +47,6 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 		BigDecimal  colIndexCity2 = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getColIndex();
 		
 		BigDecimal  city2Equivalent = (colIndexCity1.divide(colIndexCity2, 2, RoundingMode.HALF_EVEN)).multiply(city1Amount);
-		System.out.println("Total: " + city2Equivalent);
 		
 		return new COLResults(city1, city2, city1Amount, city2Equivalent);
 	}
@@ -57,7 +54,6 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	@Override
 	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal city1Amount, COLIndex colIndexCity1, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country));
-		System.out.println("Inside find by country " + country + " " + city1Amount + " " + colIndexCity1.getCity());
 		COLIndexes.forEach(System.out::println);
 		//List<COLResults> results = COLIndexes.stream().mapToDouble(r->r.getRate()).
 		List<COLResults> results = COLIndexes.stream().map(

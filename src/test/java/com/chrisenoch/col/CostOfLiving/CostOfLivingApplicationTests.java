@@ -73,12 +73,8 @@ class CostOfLivingApplicationTests {
 		
 		 
 		List<COLIndex> colIndexes = initCOLIndexes();
-		System.out.println("Debugging - Object mapper: " + objectMapper.writeValueAsString(colIndexes.get(0)));
 		COLResults cR = new COLResults("TK", "LN", BigDecimal.valueOf(6), BigDecimal.valueOf(5));
-		System.out.println("Debugging - Object mapper cR: " + objectMapper.writeValueAsString(cR));
-		
-		
-		
+
 		//this.mockMvc.perform(get("/costofliving").content.(objectMapper.writeValueAsString(colIndex)).).andDo(print()).andExpect(status().isOk());
 		this.mockMvc.perform(get("/costofliving/colindexes").contentType(MediaType.APPLICATION_JSON)).andExpect(content()
 				.string(containsString(serialiseToJSONAndRemoveLinks(colIndexes.get(0)))))
@@ -356,27 +352,21 @@ class CostOfLivingApplicationTests {
 	
 	private String serialiseToJSONAndRemoveLinks(COLIndex colIndex) throws JsonProcessingException {
 		String colIndexString = objectMapper.writeValueAsString(colIndex);
-		System.out.println("debugging: colIndexString b4 cut" + colIndexString);
 		colIndexString = colIndexString .replace(",\"links\":[]}", "");
-		System.out.println("debugging: colIndexString after cut" + colIndexString);
 		return colIndexString;
 		
 	}
 	
 	private String serialiseToJSONAndRemoveTrailingBrace(COLIndex colIndex) throws JsonProcessingException {
 		String colIndexString = objectMapper.writeValueAsString(colIndex);
-		System.out.println("debugging: colIndexString b4 cut" + colIndexString);
 		colIndexString = colIndexString.substring(0, colIndexString.length() - 1);
-		System.out.println("debugging: colIndexString after cut trailing brace" + colIndexString);
 		return colIndexString;
 		
 	}
 	
 	private String serialiseToJSONAndRemoveTrailingBrace(COLResults colResults) throws JsonProcessingException {
 		String colIndexString = objectMapper.writeValueAsString(colResults);
-		System.out.println("debugging: colIndexString b4 cut" + colIndexString);
 		colIndexString = colIndexString.substring(0, colIndexString.length() - 1);
-		System.out.println("debugging: colIndexString after cut trailing brace" + colIndexString);
 		return colIndexString;
 		
 	}
