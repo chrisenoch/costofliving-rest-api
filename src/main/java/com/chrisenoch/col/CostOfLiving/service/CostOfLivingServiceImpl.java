@@ -42,7 +42,7 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public COLResults calculateEquivalentSalary(BigDecimal city1Amount, @ToUpper String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
+	public COLResults calculateEquivalentSalary(BigDecimal city1Amount,@ToUpper  String city1,@ToUpper String city2) { //Improve code. See currency eg and null. Need to test for null.
 		BigDecimal colIndexCity1 = repository.findByCity(city1).orElseThrow(()-> new COLIndexNotFoundException(city1)).getColIndex();
 		BigDecimal  colIndexCity2 = repository.findByCity(city2).orElseThrow(()-> new COLIndexNotFoundException(city2)).getColIndex();
 		
@@ -52,7 +52,7 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	}
 	
 	@Override
-	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal city1Amount, COLIndex colIndexCity1, @ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
+	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal city1Amount, COLIndex colIndexCity1,@ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country));
 		COLIndexes.forEach(System.out::println);
 		//List<COLResults> results = COLIndexes.stream().mapToDouble(r->r.getRate()).

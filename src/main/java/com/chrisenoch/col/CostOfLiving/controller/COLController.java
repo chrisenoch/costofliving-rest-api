@@ -41,7 +41,7 @@ public class COLController extends RepresentationModel<COLController> {
 		this.assembler = assembler;
 	}
 
-	
+	//NO PROBLEM
 	@GetMapping("/{date}")
 	public ResponseEntity<COLIndexes> getRatesByDateHATEOAS(@PathVariable("date") String date){
 		
@@ -51,7 +51,7 @@ public class COLController extends RepresentationModel<COLController> {
 		return new ResponseEntity<COLIndexes>(new COLIndexes(colIndexes, OffsetDateTime.now()),HttpStatus.OK);
 	}
 
-	
+	//	NO PROBLEM
 	@GetMapping("/{amount}/{base}/to/{code}")
 	public EntityModel<COLResults>calculateCostOfLiving(@PathVariable ("amount") BigDecimal amount
 			, @PathVariable("base")String base
@@ -68,6 +68,7 @@ public class COLController extends RepresentationModel<COLController> {
 		
 	}
 	
+	//NO PROBLEM
 	@GetMapping("/{city1Amount}/{city1}/tocountry/{country}")
 	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable
 			("city1Amount") BigDecimal city1Amount, @PathVariable("city1")String city1
