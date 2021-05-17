@@ -26,7 +26,7 @@ public class COLCalculationsController {
 	@Autowired
 	CostOfLivingService costOfLivingService;
 
-	@GetMapping("/getIndexes123")
+	@GetMapping("/getIndexes")
 	public ResponseEntity<COLIndexes> getIndexes() throws Exception{
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
 	}

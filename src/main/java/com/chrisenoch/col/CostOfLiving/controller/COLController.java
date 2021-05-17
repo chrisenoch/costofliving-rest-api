@@ -17,8 +17,8 @@ import com.chrisenoch.col.CostOfLiving.entity.COLIndexes;
 import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 import com.chrisenoch.col.CostOfLiving.service.CostOfLivingService;
 
-//@Controller
-//@RequestMapping("/costofliving")
+@Controller
+@RequestMapping("/costofliving")
 public class COLController {
 	
 	@Autowired
@@ -29,7 +29,6 @@ public class COLController {
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), new Date()),HttpStatus.OK);
 	}
 	
-	//Not working
 	@GetMapping("/country/{country}")
 	public ResponseEntity<COLIndexes> getIndexesByCountry(@PathVariable("country") String country) throws Exception{
 		List<COLIndex> test = costOfLivingService.findColIndexesByCountry(country);
@@ -38,7 +37,6 @@ public class COLController {
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexesByCountry(country), new Date()),HttpStatus.OK);
 	}
 	
-	//Appears to work
 	@GetMapping("/{date}")
 	public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd")Date date) throws Exception{
 		return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), new Date()),HttpStatus.OK);
@@ -55,7 +53,6 @@ public class COLController {
 
 	}
 	
-	
 	@GetMapping("/{amount}/{base}/tocountry/{country}")
 	public ResponseEntity<List<COLResults>>calculateCostOfLivingByCountry(@PathVariable ("amount") float amount
 			, @PathVariable("base")String base
@@ -69,46 +66,5 @@ public class COLController {
 		return new ResponseEntity<List<COLResults>>(costOfLivingService.calculateEquivalentSalaryByCountry(amount, colIndex, country), HttpStatus.OK);
 
 	} 
-	
-	
-	/*
-	 * 	@GetMapping("/{amount}/{base}/to/{code}")
-	String calculateCol(@PathVariable ("amount") float amount, @PathVariable("base")String base
-			, @PathVariable("code")String code) {
-		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
-		
-		costOfLivingService.calculateEquivalentSalary(amount, base, code);
-		
-		return "mainget";
-	}
-	 */
-	
-
-
-	
-	// get rate by base code
-	//get rate by code
-	
-	//calculate the ratio and multiply this by the amount
-	
-	//below are totals, not rates
-	//a = 90  and b = 130
-	// I need to know how much more or less is a compared to b
-	//a/b * amount 
-	
-//	repository.save(new Rate("EUR",0.88857F,new Date()));
-//	repository.save(new Rate("JPY",102.17F,new Date()));
-//	repository.save(new Rate("GBP",0.75705F,new Date()));
-//	repository.save(new Rate("MXN",19.232F,new Date()));
-//	repository.save(new Rate("GBP",0.75705F,new Date()));
-	
-	
-	
-	
-	
-	
-	
-	//@RequestMapping(path="/new",method = {RequestMethod.POST})
-	
 
 }
