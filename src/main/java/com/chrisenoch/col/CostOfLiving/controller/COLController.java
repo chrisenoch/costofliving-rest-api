@@ -40,8 +40,12 @@ public class COLController extends RepresentationModel<COLController> {
 		this.costOfLivingService = costOfLivingService;
 		this.assembler = assembler;
 	}
-
-	//NO PROBLEM
+	
+	/**
+	 * Find all COLIndexes whose String version of the date contains the date passed as an argument.
+	 * @param date
+	 * @return
+	 */
 	@GetMapping("/{date}")
 	public ResponseEntity<COLIndexes> getRatesByDateHATEOAS(@PathVariable("date") String date){
 		
@@ -51,24 +55,23 @@ public class COLController extends RepresentationModel<COLController> {
 		return new ResponseEntity<COLIndexes>(new COLIndexes(colIndexes, OffsetDateTime.now()),HttpStatus.OK);
 	}
 
-	//	NO PROBLEM
+	
 	@GetMapping("/{amount}/{base}/to/{code}")
-	public EntityModel<COLResults>calculateCostOfLiving(@PathVariable ("amount") BigDecimal amount
-			, @PathVariable("base")String base
-			, @PathVariable("code")String code) {
-		System.out.println("amount: " + amount + " code:" + code + " base: " + base);
+	public EntityModel<COLResults>calculateCostOfLiving(@PathVariable ("amount") BigDecimal city1Amount
+			, @PathVariable("base")String city1
+			, @PathVariable("code")String city2) {
+		System.out.println("amount: " + city1Amount + " code:" + city2 + " base: " + city1);
 
 		//return new ResponseEntity<COLResults>(costOfLivingService.calculateEquivalentSalary(amount, base, code), HttpStatus.OK);
-		COLResults colResults = costOfLivingService.calculateEquivalentSalary(amount, base, code);
+		COLResults colResults = costOfLivingService.calculateEquivalentSalary(city1Amount, city1, city2);
 
 		return EntityModel.of(colResults,
-			      linkTo(methodOn(COLController.class).calculateCostOfLiving(amount, base, code)).withSelfRel() 
+			      linkTo(methodOn(COLController.class).calculateCostOfLiving(city1Amount, city1, city2)).withSelfRel() 
 				      ,linkTo(methodOn(COLController.class).getIndexesHATEOAS()).withSelfRel()			
 				);
 		
 	}
 	
-	//NO PROBLEM
 	@GetMapping("/{city1Amount}/{city1}/tocountry/{country}")
 	public ResponseEntity<CollectionModel<EntityModel<COLResults>>> calculateCostOfLivingByCountry(@PathVariable
 			("city1Amount") BigDecimal city1Amount, @PathVariable("city1")String city1
@@ -221,28 +224,5 @@ public class COLController extends RepresentationModel<COLController> {
 			
 			return model;
 		}
-		
-
-//		@GetMapping
-//		public ResponseEntity<COLIndexes> getIndexes() throws Exception{
-//			//CollectionModel<Person> model = CollectionModel.of(people);
-//			
-//			return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(), OffsetDateTime.now()),HttpStatus.OK);
-//		}
-		
-//		@GetMapping("/{date}")
-//		public ResponseEntity<COLIndexes> getRatesByDate(@PathVariable("date") String date) throws Exception{
-//			//OffsetDateTime offsetDateTime = date.toInstant().atOffset(ZoneOffset.UTC);
-//			System.out.println("Date debugging: " + date);
-//			System.out.println("Date debugging: " + new Date());
-//			System.out.println("Date debugging: " + LocalDateTime.now());
-//			System.out.println("Date debugging: " + OffsetDateTime.now());
-//			//System.out.println("Date debugging: " + offsetDateTime);
-//			
-//			//String dateString = offsetDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
-//			
-//			return new ResponseEntity<COLIndexes>(new COLIndexes(costOfLivingService.findColIndexes(date), OffsetDateTime.now()),HttpStatus.OK);
-//		}
-	
 
 }

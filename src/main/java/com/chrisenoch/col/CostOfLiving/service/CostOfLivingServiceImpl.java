@@ -51,6 +51,7 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 		return new COLResults(city1, city2, city1Amount, city2Equivalent);
 	}
 	
+
 	@Override
 	public List<COLResults> calculateEquivalentSalaryByCountry(BigDecimal city1Amount, COLIndex colIndexCity1,@ToUpper String country) { //Improve code. See currency eg and null. Need to test for null.
 		List<COLIndex> COLIndexes = findColIndexesByCountry(country).orElseThrow(()-> new COLIndexNotFoundException(country));
@@ -80,7 +81,8 @@ public class CostOfLivingServiceImpl implements CostOfLivingService{
 	public List<COLIndex> getRatesByShortCountryName(@ToUpper String country){
 		return repository.getRatesByShortCountryName(country);
 	}
-
+	
+	
 	@Override
 	public Optional<List<COLIndex>> findByCountryStartingWith(@ToUpper String country) {
 		return repository.findByCountryStartingWith(country);

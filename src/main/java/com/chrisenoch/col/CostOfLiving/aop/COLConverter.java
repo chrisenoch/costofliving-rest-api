@@ -13,13 +13,18 @@ import org.springframework.stereotype.Component;
 
 import com.chrisenoch.col.CostOfLiving.annotation.ToUpper;
 
+/**
+ * Converts the arguments of method parameters annotated with {@link com.chrisenoch.col.CostOfLiving.annotation.ToUpper} to uppercase by way of AOP.
+ * @author chris
+ *
+ */
 @Aspect
 @Component
-public class COLLogger {
+public class COLConverter {
 	
 
 	//@Pointcut("execution(* com.apress.messaging.service.*Service.*(..,@com.apress.messaging.annotation.ToUpper (*),..))")
-
+	
 	@Pointcut("execution(* com.chrisenoch.col.CostOfLiving.service.*ServiceImpl.*(..,@com.chrisenoch.col.CostOfLiving.annotation.ToUpper (*),..))")
     public void methodPointcut() {} //Learn code: pointcut expression with custom annotation. Think it means 0 or more args followed by @toUpper arg followed by zero or more args.
 	
