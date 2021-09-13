@@ -11,6 +11,11 @@ import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * The cost of living index for a particular city.
+ * @author chris
+ *
+ */
 @Entity
 public class COLIndex extends RepresentationModel<COLIndex> {
 	

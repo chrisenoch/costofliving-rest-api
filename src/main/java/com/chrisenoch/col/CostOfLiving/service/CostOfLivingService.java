@@ -27,13 +27,20 @@ import com.chrisenoch.col.CostOfLiving.entity.COLResults;
 	
 	 Optional<COLIndex> findByCity(String city);
 	
+		/**
+		 * Get the {@link com.chrisenoch.col.CostOfLiving.entity.COLIndex} for all countries that match the short country name for the {@code country}
+		 * argument. This will yield all countries that begin with the sequence of letters entered as the method argument. E.g. "I" would return the rates for all cities for Italy 
+		 * and Iceland, "Ic" would only take into account Iceland, and "e" would return  neither of the two. The method argument is case insensitive. 
+		 * @param country
+		 * @return
+		 */
 	//To practise implementing custom methods using SpringData
 	 List<COLIndex> getRatesByShortCountryName(String country);
 	
-	 /**
-		 * * Get the COLIndexes (cost of living indexes) for all countries that match the short country name. This will yield all countries that begin with the sequence of 
-		 * letters entered as the method argument. E.g. "I" would return the rates for all cities for Italy and Iceland, "Ic" would only 
-		 * take into account Iceland, and "e" would return  neither of the two. The method argument is case insensitive. 
+		/**
+		 * Get the {@link com.chrisenoch.col.CostOfLiving.entity.COLIndex} for all countries that match the short country name for the {@code country}
+		 * argument. This will yield all countries that begin with the sequence of letters entered as the method argument. E.g. "I" would return the rates for all cities for Italy 
+		 * and Iceland, "Ic" would only take into account Iceland, and "e" would return  neither of the two. The method argument is case insensitive. 
 		 * @param country
 		 * @return
 		 */

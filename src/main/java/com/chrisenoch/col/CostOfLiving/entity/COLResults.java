@@ -12,7 +12,7 @@ public class COLResults {
 	private BigDecimal city1Amount;
 	
 	/**
-	 * How much money city1Amount would be worth in city2
+	 * How much money {@link #city1Amount} would be worth in city2
 	 */
 	private BigDecimal city2EquivalentWorth;
 	
